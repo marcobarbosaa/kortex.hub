@@ -1,0 +1,234 @@
+.onboarding-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: hsl(220 20% 4%);
+  font-family: 'Inter', system-ui, sans-serif;
+  padding: 2rem;
+}
+
+.onboarding-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 600px;
+  animation: onboarding-fade-in 0.8s ease-out;
+}
+
+.onboarding-card {
+  background: hsla(220, 20%, 8%, 0.7);
+  backdrop-filter: blur(24px);
+  border: 1px solid hsla(24, 100%, 50%, 0.15);
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow:
+    0 20px 50px hsla(0, 0%, 0%, 0.5),
+    0 0 30px hsla(24, 100%, 50%, 0.05);
+}
+
+.onboarding-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.onboarding-logo {
+  font-family: 'Saira Stencil One', sans-serif;
+  font-size: 1.2rem;
+  color: hsl(24, 100%, 50%);
+  letter-spacing: 0.3em;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.onboarding-title {
+  font-family: 'Saira Stencil One', sans-serif;
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.onboarding-subtitle {
+  color: hsl(210, 20%, 65%);
+  font-size: 0.9rem;
+}
+
+.onboarding-step-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.step-dot {
+  width: 40px;
+  height: 4px;
+  background: hsla(210, 20%, 20%, 1);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.step-dot.active {
+  background: hsl(24, 100%, 50%);
+  box-shadow: 0 0 10px hsla(24, 100%, 50%, 0.5);
+}
+
+.onboarding-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: hsla(24, 100%, 50%, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: hsla(220, 20%, 12%, 0.5);
+  border: 1px solid hsla(220, 20%, 20%, 1);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  color: #fff;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: hsl(24, 100%, 50%);
+  background: hsla(220, 20%, 12%, 0.8);
+  box-shadow: 0 0 15px hsla(24, 100%, 50%, 0.1);
+}
+
+.goal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.goal-option {
+  background: hsla(220, 20%, 12%, 0.5);
+  border: 1px solid hsla(220, 20%, 20%, 1);
+  border-radius: 16px;
+  padding: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.8rem;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.goal-option:hover {
+  background: hsla(24, 100%, 50%, 0.05);
+  border-color: hsla(24, 100%, 50%, 0.3);
+  transform: translateY(-4px);
+}
+
+.goal-option.selected {
+  background: hsla(24, 100%, 50%, 0.1);
+  border-color: hsl(24, 100%, 50%);
+  box-shadow: 0 0 20px hsla(24, 100%, 50%, 0.1);
+}
+
+.goal-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: hsla(24, 100%, 50%, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(24, 100%, 50%);
+}
+
+.goal-option.selected .goal-icon {
+  background: hsl(24, 100%, 50%);
+  color: #fff;
+}
+
+.goal-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.onboarding-footer {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.onboarding-btn {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.onboarding-btn-prev {
+  background: transparent;
+  border: 1px solid hsla(210, 20%, 30%, 1);
+  color: hsl(210, 20%, 70%);
+}
+
+.onboarding-btn-prev:hover {
+  background: hsla(210, 20%, 20%, 0.5);
+  color: #fff;
+}
+
+.onboarding-btn-next {
+  background: linear-gradient(135deg, hsl(24, 100%, 50%), hsl(30, 100%, 55%));
+  border: none;
+  color: #fff;
+  box-shadow: 0 4px 15px hsla(24, 100%, 50%, 0.3);
+}
+
+.onboarding-btn-next:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px hsla(24, 100%, 50%, 0.4);
+}
+
+@keyframes onboarding-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .onboarding-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .goal-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,267 @@
+/* ══════════════════════════════════════════════
+   SetupInicial.css — Activation setup page
+   ══════════════════════════════════════════════ */
+
+.setup-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: hsl(220 20% 4%);
+  font-family: 'Inter', system-ui, sans-serif;
+  padding: 1.5rem;
+}
+
+.setup-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 580px;
+  animation: ob-enter 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.setup-card {
+  background: hsla(220, 20%, 8%, 0.75);
+  backdrop-filter: blur(28px);
+  border: 1px solid hsla(24, 100%, 50%, 0.12);
+  border-radius: 28px;
+  padding: 2.5rem 2.8rem;
+  box-shadow: 0 24px 60px hsla(0, 0%, 0%, 0.5);
+}
+
+/* ── Progress Bar ── */
+.setup-progress-wrap {
+  margin-bottom: 2rem;
+}
+
+.setup-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.setup-progress-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: hsl(24, 100%, 50%);
+}
+
+.setup-progress-percent {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.setup-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: hsla(220, 20%, 15%, 1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.setup-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, hsl(24, 100%, 50%), hsl(30, 100%, 55%));
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 0 10px hsla(24, 100%, 50%, 0.4);
+}
+
+/* ── Header ── */
+.setup-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.setup-logo {
+  font-family: 'Saira Stencil One', sans-serif;
+  font-size: 1.1rem;
+  color: hsl(24, 100%, 50%);
+  letter-spacing: 0.35em;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.setup-title {
+  font-family: 'Saira Stencil One', sans-serif;
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+
+.setup-subtitle {
+  color: hsl(210, 20%, 60%);
+  font-size: 0.85rem;
+}
+
+/* ── Checklist ── */
+.setup-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.setup-check-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.2rem;
+  background: hsla(220, 20%, 10%, 0.6);
+  border: 1px solid hsla(220, 20%, 18%, 1);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+}
+
+.setup-check-item.done {
+  border-color: hsla(145, 65%, 45%, 0.3);
+  background: hsla(145, 65%, 45%, 0.05);
+}
+
+.setup-check-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid hsla(210, 20%, 25%, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.setup-check-item.done .setup-check-circle {
+  background: hsl(145, 65%, 45%);
+  border-color: hsl(145, 65%, 45%);
+}
+
+.setup-check-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: hsl(210, 20%, 75%);
+}
+
+.setup-check-item.done .setup-check-text {
+  color: hsl(145, 65%, 60%);
+  text-decoration: line-through;
+  text-decoration-color: hsla(145, 65%, 45%, 0.4);
+}
+
+/* ── Form fields ── */
+.setup-field {
+  margin-bottom: 1.2rem;
+}
+
+.setup-field label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: hsla(24, 100%, 50%, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+
+.setup-field input,
+.setup-field select {
+  width: 100%;
+  background: hsla(220, 20%, 12%, 0.5);
+  border: 1px solid hsla(220, 20%, 20%, 1);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font-size: 0.88rem;
+  transition: all 0.3s ease;
+}
+
+.setup-field input:focus,
+.setup-field select:focus {
+  outline: none;
+  border-color: hsl(24, 100%, 50%);
+  box-shadow: 0 0 15px hsla(24, 100%, 50%, 0.1);
+}
+
+/* ── Type Switch ── */
+.setup-type-switch {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.setup-type-btn {
+  flex: 1;
+  padding: 0.65rem;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid hsla(220, 20%, 18%, 1);
+  background: hsla(220, 20%, 10%, 0.5);
+  color: hsl(210, 20%, 65%);
+  transition: all 0.3s ease;
+}
+
+.setup-type-btn.active {
+  background: hsla(24, 100%, 50%, 0.1);
+  border-color: hsl(24, 100%, 50%);
+  color: hsl(24, 100%, 55%);
+}
+
+/* ── Footer ── */
+.setup-footer {
+  margin-top: 2rem;
+}
+
+.setup-btn-activate {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.82rem;
+  cursor: pointer;
+  background: linear-gradient(135deg, hsl(24, 100%, 50%), hsl(30, 100%, 55%));
+  border: none;
+  color: #fff;
+  box-shadow: 0 6px 20px hsla(24, 100%, 50%, 0.3);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.setup-btn-activate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px hsla(24, 100%, 50%, 0.45);
+}
+
+.setup-btn-activate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.setup-skip {
+  display: block;
+  margin: 1rem auto 0;
+  background: none;
+  border: none;
+  color: hsl(210, 20%, 50%);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.setup-skip:hover { color: #fff; }
+
+@media (max-width: 640px) {
+  .setup-card { padding: 2rem 1.5rem; }
+}

@@ -1,0 +1,699 @@
+/* ================================================================
+   REGISTER PAGE — Kortex Split-Layout (Orange Theme)
+   Full-screen animated registration with glitch interactivity
+   ================================================================ */
+
+/* --- Page Wrapper: full-screen, bg spans everything --- */
+.register-page {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: hsl(220 20% 5%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ================================================================
+   FULL-SCREEN ANIMATED BACKGROUND (spans both panels)
+   ================================================================ */
+.register-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.register-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(hsl(24 100% 50% / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(24 100% 50% / 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: reg-grid-pan 20s linear infinite;
+  mask-image: radial-gradient(ellipse 80% 70% at 30% 50%, black 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 30% 50%, black 20%, transparent 75%);
+}
+
+.register-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.register-bg-orb--1 {
+  width: 600px;
+  height: 600px;
+  top: -5%;
+  left: -5%;
+  background: hsl(24 100% 50% / 0.15);
+  filter: blur(120px);
+  animation: reg-orb-1 18s ease-in-out infinite;
+}
+
+.register-bg-orb--2 {
+  width: 450px;
+  height: 450px;
+  bottom: -10%;
+  left: 30%;
+  background: hsl(30 100% 55% / 0.12);
+  filter: blur(110px);
+  animation: reg-orb-2 22s ease-in-out infinite;
+}
+
+.register-bg-orb--3 {
+  width: 350px;
+  height: 350px;
+  top: 30%;
+  right: 10%;
+  background: hsl(24 100% 50% / 0.08);
+  filter: blur(100px);
+  animation: reg-orb-3 26s ease-in-out infinite;
+}
+
+/* Sweeping light beam — crosses the ENTIRE page */
+.register-bg-beam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, hsl(24 100% 50% / 0.1), transparent);
+  animation: reg-beam 10s ease-in-out infinite;
+}
+
+/* Floating particles */
+.register-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: hsl(24 100% 55% / 0.7);
+  pointer-events: none;
+}
+
+/* Geometric shapes */
+.register-shape {
+  position: absolute;
+  border: 2px solid hsl(24 100% 50% / 0.12);
+  pointer-events: none;
+}
+
+.register-shape--ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  bottom: 12%;
+  left: 6%;
+  animation: reg-shape-drift 16s ease-in-out infinite;
+}
+
+.register-shape--diamond {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  top: 15%;
+  left: 40%;
+  border-color: hsl(24 100% 50% / 0.18);
+  animation: reg-shape-spin 12s linear infinite;
+}
+
+.register-shape--ring-sm {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  bottom: 30%;
+  right: 35%;
+  border-color: hsl(30 100% 55% / 0.15);
+  animation: reg-shape-drift 20s ease-in-out infinite reverse;
+}
+
+/* Diagonal connector line between panels */
+.register-connector {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 55%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 5%,
+    hsl(24 100% 50% / 0.15) 30%,
+    hsl(24 100% 50% / 0.3) 50%,
+    hsl(24 100% 50% / 0.15) 70%,
+    transparent 95%
+  );
+  z-index: 1;
+}
+
+.register-connector::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: hsl(24 100% 50%);
+  box-shadow: 0 0 12px hsl(24 100% 50% / 0.8);
+  animation: reg-connector-dot 4s ease-in-out infinite;
+}
+
+/* ================================================================
+   LEFT PANEL
+   ================================================================ */
+.register-left {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 4rem 2rem 5%;
+  z-index: 2;
+}
+
+.register-left-content {
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+  animation: reg-content-enter 0.7s ease-out both;
+}
+
+.register-logo {
+  font-family: 'Saira Stencil One', sans-serif;
+  font-size: 1.3rem;
+  color: hsl(24 100% 50%);
+  letter-spacing: 0.2em;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 20px hsl(24 100% 50% / 0.4);
+}
+
+.register-welcome-title {
+  font-family: 'Saira Stencil One', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 0.8rem;
+}
+
+.register-welcome-title span {
+  color: hsl(24 100% 50%);
+  text-shadow: 0 0 30px hsl(24 100% 50% / 0.3);
+}
+
+.register-welcome-sub {
+  font-size: 0.95rem;
+  color: hsl(210 20% 65%);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+/* Feature pills */
+.register-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.register-feature-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.5rem 1rem;
+  background: hsl(24 100% 50% / 0.05);
+  border: 1px solid hsl(24 100% 50% / 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: default;
+}
+
+.register-feature-pill:hover {
+  background: hsl(24 100% 50% / 0.12);
+  border-color: hsl(24 100% 50% / 0.35);
+  transform: translateX(8px);
+  box-shadow: 0 0 25px hsl(24 100% 50% / 0.08);
+}
+
+.register-feature-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: hsl(24 100% 50% / 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(24 100% 50%);
+  flex-shrink: 0;
+  transition: all 0.35s ease;
+}
+
+.register-feature-pill:hover .register-feature-icon {
+  background: hsl(24 100% 50% / 0.25);
+  box-shadow: 0 0 15px hsl(24 100% 50% / 0.2);
+}
+
+.register-feature-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.register-feature-text {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: hsl(210 20% 78%);
+  letter-spacing: 0.01em;
+}
+
+/* ================================================================
+   RIGHT PANEL — Form Card
+   ================================================================ */
+.register-right {
+  width: 480px;
+  min-width: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 400px;
+  background: hsl(220 18% 8% / 0.65);
+  backdrop-filter: blur(24px);
+  border: 1px solid hsl(24 100% 50% / 0.12);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow:
+    0 0 80px hsl(24 100% 50% / 0.05),
+    0 30px 60px hsl(0 0% 0% / 0.5);
+  animation: reg-card-enter 0.6s ease-out 0.2s both;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle scan line across the card */
+.register-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsl(24 100% 50% / 0.5), transparent);
+  animation: reg-card-scan 3s ease-in-out infinite;
+}
+
+.register-card-header {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.register-card-title {
+  font-family: 'Saira Stencil One', sans-serif;
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.05em;
+}
+
+.register-card-sub {
+  font-size: 0.75rem;
+  color: hsl(210 20% 50%);
+}
+
+/* ================================================================
+   FORM INPUTS — with Glitch focus animation
+   ================================================================ */
+.register-form-group {
+  position: relative;
+  margin-bottom: 0.8rem;
+}
+
+.register-form-group label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: hsl(24 100% 50% / 0.7);
+  margin-bottom: 0.25rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Glitch effect on label when input is focused */
+.register-form-group input:focus ~ label,
+.register-form-group:focus-within label {
+  color: hsl(24 100% 50%);
+  text-shadow: 0 0 8px hsl(24 100% 50% / 0.4);
+  animation: reg-label-glitch 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.register-form-group input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: hsl(220 20% 10% / 0.5);
+  border: 1px solid hsl(220 20% 18%);
+  border-radius: 12px;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.register-form-group input::placeholder {
+  color: hsl(210 20% 35%);
+}
+
+.register-form-group input:focus {
+  border-color: hsl(24 100% 50%);
+  box-shadow:
+    0 0 0 3px hsl(24 100% 50% / 0.1),
+    0 0 20px hsl(24 100% 50% / 0.08);
+  background: hsl(220 20% 10% / 0.7);
+}
+
+/* ================================================================
+   SUBMIT BUTTON — animated gradient with glitch hover
+   ================================================================ */
+.register-submit {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, hsl(24 100% 50%), hsl(30 100% 55%));
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 4px 25px hsl(24 100% 50% / 0.3);
+}
+
+.register-submit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.25), transparent);
+  transition: left 0.6s ease;
+}
+
+.register-submit:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 8px 35px hsl(24 100% 50% / 0.45),
+    0 0 0 1px hsl(24 100% 50% / 0.5);
+}
+
+.register-submit:hover::before {
+  left: 100%;
+}
+
+.register-submit:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ================================================================
+   SOCIAL LOGIN
+   ================================================================ */
+.register-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.register-divider::before,
+.register-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: hsl(220 20% 18%);
+}
+
+.register-divider span {
+  font-size: 0.65rem;
+  color: hsl(210 20% 40%);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+}
+
+.register-social-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.register-social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  background: hsl(220 18% 10% / 0.5);
+  border: 1px solid hsl(220 20% 18%);
+  border-radius: 12px;
+  color: hsl(210 20% 75%);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-social-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, hsl(24 100% 50% / 0.08), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.register-social-btn:hover {
+  background: hsl(24 100% 50% / 0.08);
+  border-color: hsl(24 100% 50% / 0.3);
+  color: #fff;
+  box-shadow: 0 0 20px hsl(24 100% 50% / 0.08);
+}
+
+.register-social-btn:hover::after {
+  opacity: 1;
+}
+
+.register-social-btn svg {
+  width: 14px;
+  height: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Back link & Footer Links --- */
+.register-footer-links {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.register-login-prompt {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: hsl(210 20% 55%);
+}
+
+.register-login-btn {
+  background: none;
+  border: none;
+  color: hsl(24 100% 50%);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 2px 4px;
+}
+
+.register-login-btn:hover {
+  text-shadow: 0 0 12px hsl(24 100% 50% / 0.5);
+  transform: translateY(-1px);
+}
+
+.register-back-link {
+  display: block;
+  text-align: center;
+  font-size: 0.7rem;
+  color: hsl(210 20% 40%);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.register-back-link:hover {
+  color: hsl(210 20% 70%);
+}
+
+/* ================================================================
+   KEYFRAMES
+   ================================================================ */
+
+/* Grid movement */
+@keyframes reg-grid-pan {
+  0% { background-position: 0 0; }
+  100% { background-position: 60px 60px; }
+}
+
+/* Orb drift — organic movement */
+@keyframes reg-orb-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(60px, -40px) scale(1.1); }
+  50% { transform: translate(100px, 30px) scale(1.05); }
+  75% { transform: translate(-40px, 50px) scale(0.95); }
+}
+
+@keyframes reg-orb-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-80px, -60px) scale(1.15); }
+  66% { transform: translate(60px, 80px) scale(0.9); }
+}
+
+@keyframes reg-orb-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-100px, -50px) scale(1.1); }
+}
+
+/* Beam sweep across entire viewport */
+@keyframes reg-beam {
+  0% { transform: translateX(-300px) skewX(-15deg); opacity: 0; }
+  15% { opacity: 0.8; }
+  85% { opacity: 0.8; }
+  100% { transform: translateX(100vw) skewX(-15deg); opacity: 0; }
+}
+
+/* Particle float upward */
+@keyframes reg-particle-rise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 0.8; }
+  100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
+}
+
+/* Geometric shape drift */
+@keyframes reg-shape-drift {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+  50% { transform: translateY(-20px) rotate(180deg); opacity: 0.6; }
+}
+
+@keyframes reg-shape-spin {
+  0% { transform: rotate(0deg); opacity: 0.3; }
+  50% { opacity: 0.5; }
+  100% { transform: rotate(360deg); opacity: 0.3; }
+}
+
+/* Connector dot pulse */
+@keyframes reg-connector-dot {
+  0% { top: 5%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 95%; opacity: 0; }
+}
+
+/* Card entry */
+@keyframes reg-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Card scan line */
+@keyframes reg-card-scan {
+  0% { top: 0; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Content enter */
+@keyframes reg-content-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Glitch label */
+@keyframes reg-label-glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-3px, 1px); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-2px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0); }
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 900px) {
+  .register-page {
+    flex-direction: column;
+  }
+
+  .register-left {
+    min-height: 300px;
+    padding: 3rem 2rem 2rem;
+  }
+
+  .register-welcome-title {
+    font-size: 1.8rem;
+  }
+
+  .register-features {
+    display: none;
+  }
+
+  .register-connector {
+    display: none;
+  }
+
+  .register-right {
+    width: 100%;
+    min-width: unset;
+    padding: 1.5rem;
+  }
+
+  .register-card {
+    max-width: 100%;
+  }
+}
