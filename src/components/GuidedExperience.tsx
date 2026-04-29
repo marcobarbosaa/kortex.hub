@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Check, X, Lightbulb, ChevronRight } from 'lucide-react';
+import { Check, X, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ChecklistItem {

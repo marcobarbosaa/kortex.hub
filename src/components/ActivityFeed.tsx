@@ -1,4 +1,4 @@
-import { Zap, Users, Palette, Globe, TrendingUp, TicketCheck } from "lucide-react";
+import { Zap, Users, TrendingUp, TicketCheck } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/client";
 import { formatDistanceToNow } from "date-fns";
@@ -67,7 +67,7 @@ export function ActivityFeed() {
       });
 
       // Ordenar tudo por tempo (mais recente primeiro)
-      items.sort((a, b) => {
+      items.sort((_a, _b) => {
         // Usar o tempo formatado como proxy — ou idealmente guardar o Date
         return 0; // Mantém a ordem de inserção por categoria
       });

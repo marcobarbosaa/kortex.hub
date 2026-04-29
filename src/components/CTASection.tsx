@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useNavigate } from "react-router-dom";
 
