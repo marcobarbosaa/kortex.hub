@@ -22,7 +22,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-[#050505] border-t border-foreground/[0.06]">
+    <footer className="bg-muted/50 border-t border-foreground/[0.06]">
       <div className="max-w-[1200px] mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div>

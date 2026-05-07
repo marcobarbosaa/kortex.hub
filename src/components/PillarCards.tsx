@@ -6,11 +6,11 @@ export function PillarCards() {
   const { data: stats } = useQuery({
     queryKey: ['admin-pillar-stats'],
     queryFn: async () => {
-      // Contar campanhas ativas
-      const { count: campaignsActive } = await supabase
-        .from('campaigns')
+      // Contar projetos em análise (paused)
+      const { count: projectsPaused } = await supabase
+        .from('projects')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'active');
+        .eq('status', 'paused');
 
       // Contar projetos ativos
       const { count: projectsActive } = await supabase
@@ -29,19 +29,14 @@ export function PillarCards() {
         .from('projects')
         .select('*', { count: 'exact', head: true });
 
-      // Contar total de campanhas
-      const { count: campaignsTotal } = await supabase
-        .from('campaigns')
-        .select('*', { count: 'exact', head: true });
-
       const projectProgress = projectsTotal 
         ? Math.round(((projectsCompleted || 0) / projectsTotal) * 100) 
         : 0;
 
       return {
-        campaignsActive: campaignsActive || 0,
-        campaignsTotal: campaignsTotal || 0,
+        projectsPaused: projectsPaused || 0,
         projectsActive: projectsActive || 0,
+        projectsCompleted: projectsCompleted || 0,
         projectsTotal: projectsTotal || 0,
         projectProgress,
       };
@@ -51,10 +46,10 @@ export function PillarCards() {
   const pillars = [
     {
       icon: Brain,
-      title: "Estratégia & Performance",
-      value: String(stats?.campaignsActive || 0),
-      label: "campanhas ativas",
-      progress: stats?.campaignsTotal ? Math.round(((stats.campaignsActive) / stats.campaignsTotal) * 100) : 0,
+      title: "Solicitações Pendentes",
+      value: String(stats?.projectsPaused || 0),
+      label: "projetos em análise",
+      progress: stats?.projectsTotal ? Math.round(((stats.projectsPaused) / stats.projectsTotal) * 100) : 0,
     },
     {
       icon: Palette,
@@ -65,9 +60,9 @@ export function PillarCards() {
     },
     {
       icon: Settings,
-      title: "Progresso Geral",
-      value: `${stats?.projectProgress || 0}%`,
-      label: "projetos concluídos",
+      title: "Projetos Concluídos",
+      value: String(stats?.projectsCompleted || 0),
+      label: "entregues",
       progress: stats?.projectProgress || 0,
     },
   ];

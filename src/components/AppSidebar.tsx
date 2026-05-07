@@ -14,16 +14,13 @@ interface AppSidebarProps {
 
 const mainItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
-  { title: "Performance", url: "/performance", icon: TrendingUp },
   { title: "Clientes", url: "/clients", icon: Users },
-  { title: "Campanhas", url: "/campaigns", icon: BarChart3 },
   { title: "Projetos", url: "/admin/projetos", icon: Briefcase },
   { title: "Faturas", url: "/admin/faturas", icon: Receipt },
   { title: "Suporte", url: "/admin/suporte", icon: MessageSquare },
 ];
 
 const toolItems = [
-  { title: "Design Hub", url: "/design", icon: Palette },
   { title: "Automações", url: "/automations", icon: Zap },
   { title: "Web Apps", url: "/webapps", icon: Globe },
 ];

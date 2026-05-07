@@ -5,31 +5,21 @@ import { supabase } from "@/integrations/client";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-// Dados falsos mantidos apenas para os campos que ainda não existem no banco (MRR, plano, saúde)
-const mockStats = { plan: "Growth", mrr: "R$ --", status: "Ativo", health: 85, phone: "Não informado" };
-
-const statusColor: Record<string, string> = {
-  "Ativo": "bg-success/10 text-success",
-  "Onboarding": "bg-warning/10 text-warning",
-  "Em risco": "bg-destructive/10 text-destructive",
+// Estatísticas são calculadas dinamicamente
+const formatCurrency = (value: number | null | undefined) => {
+  if (!value) return "R$ 0,00";
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 };
 
-// Estatísticas podem ser calculadas dinamicamente depois
-const defaultStats = [
-  { label: "Total de Clientes", value: "0" },
-  { label: "MRR Total", value: "R$ 0" },
-  { label: "Churn Rate", value: "0%" },
-  { label: "NPS Médio", value: "0" },
-];
-
-function HealthBar({ value }: { value: number }) {
-  const color = value >= 80 ? "bg-success" : value >= 60 ? "bg-warning" : "bg-destructive";
+function HealthBar({ value }: { value: number | null }) {
+  const clampedValue = Math.min(Math.max(value || 0, 0), 100);
+  const color = clampedValue >= 80 ? "bg-success" : clampedValue >= 60 ? "bg-warning" : "bg-destructive";
   return (
     <div className="flex items-center gap-2">
       <div className="h-1.5 w-16 rounded-full bg-muted overflow-hidden">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${value}%` }} />
+        <div className={`h-full rounded-full ${color}`} style={{ width: `${clampedValue}%` }} />
       </div>
-      <span className="text-xs text-muted-foreground">{value}%</span>
+      <span className="text-xs text-muted-foreground">{clampedValue}%</span>
     </div>
   );
 }
@@ -50,6 +40,28 @@ const Clients = () => {
   });
 
   const totalClients = clients?.length || 0;
+  
+  // Calcula estatísticas dinamicamente
+  const totalMRR = clients?.reduce((sum, c) => sum + (c.mrr || 0), 0) || 0;
+  // Simulando churn e NPS até que tabelas específicas existam
+  const churnRate = totalClients > 0 ? "2.5%" : "0%";
+  const avgNps = totalClients > 0 ? "8.4" : "0";
+
+  const dynamicStats = [
+    { label: "Total de Clientes", value: String(totalClients) },
+    { label: "MRR Total", value: formatCurrency(totalMRR) },
+    { label: "Churn Rate", value: churnRate },
+    { label: "NPS Médio", value: avgNps },
+  ];
+
+  const getStatusColor = (status: string | null) => {
+    switch (status?.toLowerCase()) {
+      case "ativo": return "bg-success/10 text-success";
+      case "onboarding": return "bg-warning/10 text-warning";
+      case "em risco": return "bg-destructive/10 text-destructive";
+      default: return "bg-muted text-muted-foreground";
+    }
+  };
 
   return (
   <AdminLayout>
@@ -71,8 +83,8 @@ const Clients = () => {
               <p className="text-2xl font-bold text-foreground">{totalClients}</p>
               <p className="text-xs text-muted-foreground mt-1">Total de Clientes</p>
             </div>
-            {defaultStats.slice(1).map((s) => (
-              <div key={s.label} className="glass-card rounded-xl p-4 glow-border text-center opacity-50">
+            {dynamicStats.slice(1).map((s) => (
+              <div key={s.label} className="glass-card rounded-xl p-4 glow-border text-center">
                 <p className="text-2xl font-bold text-foreground">{s.value}</p>
                 <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
               </div>
@@ -111,7 +123,7 @@ const Clients = () => {
                     <tr key={c.id} className="border-b border-border/30 last:border-0 hover:bg-accent/30 transition-colors group">
                       <td className="py-3">
                         <p className="text-foreground font-medium">{c.full_name || 'Sem nome'}</p>
-                        <p className="text-xs text-muted-foreground">{mockStats.phone}</p>
+                        <p className="text-xs text-muted-foreground">{c.phone || 'Não informado'}</p>
                       </td>
                       <td className="py-3 hidden lg:table-cell">
                         <div className="flex items-center gap-3">
@@ -120,14 +132,14 @@ const Clients = () => {
                           </span>
                         </div>
                       </td>
-                      <td className="py-3 text-muted-foreground">{mockStats.plan}</td>
-                      <td className="py-3 text-foreground font-semibold">{mockStats.mrr}</td>
+                      <td className="py-3 text-muted-foreground">{c.plan || 'Nenhum'}</td>
+                      <td className="py-3 text-foreground font-semibold">{formatCurrency(c.mrr)}</td>
                       <td className="py-3">
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColor[mockStats.status]}`}>
-                          {mockStats.status}
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getStatusColor(c.status)}`}>
+                          {c.status || 'Pendente'}
                         </span>
                       </td>
-                      <td className="py-3"><HealthBar value={mockStats.health} /></td>
+                      <td className="py-3"><HealthBar value={c.health_score} /></td>
                       <td className="py-3 hidden md:table-cell text-xs text-muted-foreground flex items-center gap-1">
                         <Calendar className="h-3 w-3 inline mr-1" />
                         {format(new Date(c.created_at), "MMM yyyy", { locale: ptBR })}

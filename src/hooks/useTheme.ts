@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export type ThemeId = "blue" | "violet" | "emerald" | "rose" | "amber" | "cyan";
+export type ThemeId = "blue" | "violet" | "emerald" | "rose" | "amber" | "cyan" | "neon";
 
 export interface ThemeOption {
   id: ThemeId;
@@ -15,6 +15,12 @@ export const THEMES: ThemeOption[] = [
     label: "Blue",
     primary: "210 100% 55%",
     gradient: "linear-gradient(135deg, hsl(210,100%,55%), hsl(220,100%,65%))",
+  },
+  {
+    id: "neon",
+    label: "Neon",
+    primary: "275 100% 60%",
+    gradient: "linear-gradient(135deg, hsl(275, 100%, 60%), hsl(185, 100%, 50%))",
   },
   {
     id: "violet",

@@ -72,7 +72,7 @@ const SystemSection = () => {
 
   return (
     <section id="how-it-works" className="section-padding relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-[#0a0015] to-background" />
+      <div className="absolute inset-0 bg-background" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-kortex-orange/5 blur-[150px]" />
 
       <div className="relative max-w-[1200px] mx-auto text-center">

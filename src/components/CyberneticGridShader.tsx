@@ -30,6 +30,10 @@ const CyberneticGridShader = () => {
       uniform float iTime;
       uniform vec2 iMouse;
 
+      uniform vec3 uGridColor;
+      uniform vec3 uPulseColor;
+      uniform vec3 uGlowColor;
+
       float random(vec2 st) {
         return fract(sin(dot(st.xy, vec2(12.9898, 78.233)))
                      * 43758.5453123);
@@ -54,26 +58,27 @@ const CyberneticGridShader = () => {
         vec2 gridUv = abs(fract(uv * 10.0) - 0.5);
         float line  = pow(1.0 - min(gridUv.x, gridUv.y), 50.0);
 
-        // base grid color pulsing (Kortex Orange)
-        vec3 gridColor = vec3(1.0, 0.415, 0.0);
-        vec3 color     = gridColor
-                       * line
-                       * (0.5 + sin(t * 2.0) * 0.2);
+        // base grid color pulsing
+        vec3 color = uGridColor
+                   * line
+                   * (0.5 + sin(t * 2.0) * 0.2);
 
-        // energetic pulses along grid (Light Orange / Yellowish)
+        // energetic pulses along grid
         float energy = sin(uv.x * 20.0 + t * 5.0)
                      * sin(uv.y * 20.0 + t * 3.0);
         energy = smoothstep(0.8, 1.0, energy);
-        color += vec3(1.0, 0.7, 0.2) * energy * line;
+        color += uPulseColor * energy * line;
 
-        // glow around mouse (Subtle Orange glow)
+        // glow around mouse
         float glow = smoothstep(0.1, 0.0, mouseDist);
-        color += vec3(1.0, 0.6, 0.2) * glow * 0.5;
+        color += uGlowColor * glow * 0.5;
 
         // subtle noise
         color += random(uv + t * 0.1) * 0.05;
 
-        gl_FragColor = vec4(color, 1.0);
+        // Use line alpha so background is transparent (shows CSS background)
+        float alpha = line * (0.6 + sin(iTime * 0.4) * 0.1) + energy * line * 0.8 + glow * 0.3;
+        gl_FragColor = vec4(color, clamp(alpha, 0.0, 1.0));
       }
     `;
 
@@ -84,13 +89,17 @@ const CyberneticGridShader = () => {
       iMouse:      { value: new THREE.Vector2(
                        window.innerWidth / 2,
                        window.innerHeight / 2
-                     ) }
+                     ) },
+      uGridColor:  { value: new THREE.Vector3(1.0, 0.415, 0.0) },
+      uPulseColor: { value: new THREE.Vector3(1.0, 0.7, 0.2) },
+      uGlowColor:  { value: new THREE.Vector3(1.0, 0.6, 0.2) }
     };
 
     const material = new THREE.ShaderMaterial({
       vertexShader,
       fragmentShader,
-      uniforms
+      uniforms,
+      transparent: true,
     });
 
     const geometry = new THREE.PlaneGeometry(2, 2);
@@ -119,6 +128,18 @@ const CyberneticGridShader = () => {
     // 6) Animation loop
     renderer.setAnimationLoop(() => {
       uniforms.iTime.value = clock.getElapsedTime();
+      
+      const isLight = document.documentElement.classList.contains('light');
+      if (isLight) {
+        uniforms.uGridColor.value.set(0.55, 0.05, 0.95); // Roxo Neon intenso
+        uniforms.uPulseColor.value.set(0.0, 0.75, 1.0);  // Azul Piscina
+        uniforms.uGlowColor.value.set(0.35, 0.0, 0.75);
+      } else {
+        uniforms.uGridColor.value.set(1.0, 0.415, 0.0);
+        uniforms.uPulseColor.value.set(1.0, 0.7, 0.2);
+        uniforms.uGlowColor.value.set(1.0, 0.6, 0.2);
+      }
+
       renderer.render(scene, camera);
     });
 

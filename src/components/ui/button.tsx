@@ -51,7 +51,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     if (isAnimated) {
       return (
         <Comp
-          className={cn("animated-button", className)}
+          className={cn(buttonVariants({ variant, size, className }))}
           ref={ref}
           {...props}
         >

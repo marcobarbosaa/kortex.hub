@@ -10,36 +10,26 @@ export function ColorModeToggle() {
     <button
       onClick={toggle}
       aria-label={isDark ? "Ativar tema claro" : "Ativar tema escuro"}
-      title={isDark ? "Tema claro" : "Tema escuro"}
       className={cn(
-        "relative h-9 w-9 rounded-lg flex items-center justify-center",
-        "text-muted-foreground hover:text-foreground hover:bg-muted",
-        "transition-colors duration-200 overflow-hidden"
+        "group relative h-9 w-16 rounded-full p-1 transition-all duration-500",
+        "bg-foreground/[0.03] border border-foreground/[0.08] hover:border-kortex-orange/30",
+        "shadow-inner"
       )}
     >
-      {/* Sun icon — shown in dark mode (click → go light) */}
-      <span
+      <div
         className={cn(
-          "absolute inset-0 flex items-center justify-center transition-all duration-300",
-          isDark
-            ? "opacity-100 rotate-0 scale-100"
-            : "opacity-0 -rotate-90 scale-50"
+          "h-full w-7 rounded-full flex items-center justify-center transition-all duration-500 shadow-sm",
+          isDark 
+            ? "translate-x-7 bg-kortex-orange shadow-kortex-orange/20" 
+            : "translate-x-0 bg-white"
         )}
       >
-        <Sun className="h-4 w-4" />
-      </span>
-
-      {/* Moon icon — shown in light mode (click → go dark) */}
-      <span
-        className={cn(
-          "absolute inset-0 flex items-center justify-center transition-all duration-300",
-          !isDark
-            ? "opacity-100 rotate-0 scale-100"
-            : "opacity-0 rotate-90 scale-50"
+        {isDark ? (
+          <Sun className="h-3.5 w-3.5 text-white animate-in zoom-in spin-in-90 duration-500" />
+        ) : (
+          <Moon className="h-3.5 w-3.5 text-slate-900 animate-in zoom-in spin-in-90 duration-500" />
         )}
-      >
-        <Moon className="h-4 w-4" />
-      </span>
+      </div>
     </button>
   );
 }

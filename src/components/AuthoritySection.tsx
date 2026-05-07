@@ -14,7 +14,7 @@ const AuthoritySection = () => {
 
   return (
     <section className="section-padding relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-[#0d0a12] to-background" />
+      <div className="absolute inset-0 bg-muted/30" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-kortex-orange/5 blur-[120px]" />
 
       <div className="relative max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">

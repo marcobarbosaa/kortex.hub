@@ -4,6 +4,10 @@ import {
   Check, Crown, Zap, Sparkles, Star
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/client';
+import { useState } from 'react';
+import { useAuth } from '@/components/AuthProvider';
+import { Loader2 } from 'lucide-react';
 
 const FREE_FEATURES = [
   'Controle financeiro básico',
@@ -27,11 +31,34 @@ const PREMIUM_FEATURES = [
 
 const Upgrade = () => {
   const { onboardingData } = useOnboardingGuard();
+  const { user } = useAuth();
 
-  const handleUpgrade = () => {
-    toast.success('Redirecionando para o checkout...', {
-      description: 'Integração com gateway de pagamento em breve.',
-    });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleUpgrade = async () => {
+    try {
+      setIsLoading(true);
+      toast.loading('Preparando checkout...', { id: 'checkout' });
+      
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { 
+          priceId: 'price_test_123', // Replace with real Stripe Price ID
+          email: user?.email,
+          mode: 'subscription'
+        }
+      });
+
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('URL de checkout não retornada.');
+      }
+    } catch (err: any) {
+      toast.error('Erro ao iniciar checkout', { id: 'checkout', description: err.message });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -142,9 +169,10 @@ const Upgrade = () => {
 
           <button
             onClick={handleUpgrade}
-            className="w-full py-3 rounded-xl text-sm font-bold uppercase tracking-wider bg-gradient-to-r from-primary to-blue-500 text-white hover:shadow-lg hover:shadow-primary/25 transition-all hover:-translate-y-0.5"
+            disabled={isLoading}
+            className="w-full py-3 rounded-xl text-sm font-bold uppercase tracking-wider bg-gradient-to-r from-primary to-blue-500 text-white hover:shadow-lg hover:shadow-primary/25 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
           >
-            Começar Teste Grátis
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Começar Teste Grátis'}
           </button>
         </div>
       </div>

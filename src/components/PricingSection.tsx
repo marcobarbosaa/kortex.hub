@@ -182,7 +182,7 @@ const PricingSection = () => {
   const activePlans = plansByCategory[activeTab] || [];
 
   return (
-    <section id="pricing" className="section-padding bg-[#111111] relative overflow-hidden">
+    <section id="pricing" className="section-padding bg-muted/50 relative overflow-hidden">
       {/* Animated grid */}
       <div className="absolute inset-0 hero-grid-bg opacity-40 pointer-events-none" />
       

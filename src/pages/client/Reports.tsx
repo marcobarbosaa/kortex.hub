@@ -4,7 +4,14 @@ import { cn } from "@/lib/utils";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import { trafficData } from "./_data";
+const trafficData = [
+  { mes: "Out", visitas: 1200, leads: 38 },
+  { mes: "Nov", visitas: 1900, leads: 62 },
+  { mes: "Dez", visitas: 2400, leads: 88 },
+  { mes: "Jan", visitas: 2100, leads: 74 },
+  { mes: "Fev", visitas: 3100, leads: 105 },
+  { mes: "Mar", visitas: 4200, leads: 142 },
+];
 
 const reports = [
   { name: "Relatório Mensal – Março 2026",     date: "01 Abr 2026", size: "1.8 MB" },

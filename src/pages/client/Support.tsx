@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ClientLayout } from "@/components/ClientLayout";
 import {
   MessageSquare, Globe, Calendar, FileText,
@@ -241,6 +241,24 @@ const TicketChat = ({ ticketId, initialDescription }: { ticketId: string, initia
       return data;
     }
   });
+
+  useEffect(() => {
+    if (!ticketId) return;
+
+    const channel = supabase.channel(`chat-${ticketId}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'ticket_messages', filter: `ticket_id=eq.${ticketId}` },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['ticket-messages', ticketId] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [ticketId, queryClient]);
 
   const sendMessage = useMutation({
     mutationFn: async (text: string) => {

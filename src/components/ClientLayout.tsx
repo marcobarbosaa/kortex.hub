@@ -22,7 +22,6 @@ interface ClientLayoutProps {
 const NAV = [
   { label: "Visão Geral", icon: LayoutDashboard, url: "/cliente" },
   { label: "Projetos",    icon: Briefcase,        url: "/cliente/projetos" },
-  { label: "Relatórios",  icon: BarChart3,         url: "/cliente/relatorios" },
   { label: "Financeiro",  icon: CreditCard,        url: "/cliente/financeiro" },
   { label: "Serviços",    icon: Layers,            url: "/cliente/servicos" },
   { label: "Suporte",     icon: MessageSquare,     url: "/cliente/suporte" },

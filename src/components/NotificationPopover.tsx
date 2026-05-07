@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/client";
 import { Bell, Check, Trash2, Loader2, Info } from "lucide-react";
@@ -29,6 +29,24 @@ export function NotificationPopover() {
     },
     enabled: !!user,
   });
+
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase.channel('realtime-notifications')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['notifications'] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, queryClient]);
 
   const markAsRead = useMutation({
     mutationFn: async (id: string) => {

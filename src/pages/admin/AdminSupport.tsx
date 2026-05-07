@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { MessageSquare, Loader2, Send, ChevronRight, Clock, AlertCircle } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -7,6 +7,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const STATUS_COLOR: Record<string, string> = {
   open: "bg-primary/10 text-primary border-primary/20",
@@ -111,7 +112,7 @@ const AdminSupport = () => {
 const TicketStatusSelector = ({ ticket }: { ticket: any }) => {
   const queryClient = useQueryClient();
   const updateStatus = useMutation({
-    mutationFn: async (status: string) => {
+    mutationFn: async (status: 'open' | 'in_progress' | 'resolved') => {
       const { error } = await supabase.from('support_tickets').update({ status, updated_at: new Date().toISOString() }).eq('id', ticket.id);
       if (error) throw error;
     },
@@ -124,7 +125,7 @@ const TicketStatusSelector = ({ ticket }: { ticket: any }) => {
   return (
     <select
       value={ticket.status}
-      onChange={(e) => updateStatus.mutate(e.target.value)}
+      onChange={(e) => updateStatus.mutate(e.target.value as 'open' | 'in_progress' | 'resolved')}
       className="bg-muted/50 border border-border/50 rounded px-2 py-1 text-xs text-foreground outline-none focus:border-primary/50"
     >
       <option value="open">Aberto</option>
@@ -151,6 +152,24 @@ const AdminTicketChat = ({ ticketId, initialDescription }: { ticketId: string, i
       return data;
     }
   });
+
+  useEffect(() => {
+    if (!ticketId) return;
+
+    const channel = supabase.channel(`admin-chat-${ticketId}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'ticket_messages', filter: `ticket_id=eq.${ticketId}` },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['ticket-messages', ticketId] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [ticketId, queryClient]);
 
   const sendMessage = useMutation({
     mutationFn: async (text: string) => {

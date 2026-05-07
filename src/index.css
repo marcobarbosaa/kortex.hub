@@ -177,7 +177,7 @@
 
 /* ---- Light mode ---- */
 .light {
-  --background: 210 20% 98%;
+  --background: 0 0% 100%;
   --foreground: 220 20% 12%;
 
   --card: 0 0% 100%;
@@ -186,16 +186,17 @@
   --popover: 0 0% 100%;
   --popover-foreground: 220 20% 12%;
 
-  --primary: 210 100% 50%;
+  /* Roxo Neon */
+  --primary: 275 100% 60%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 220 14% 92%;
+  --secondary: 220 14% 96%;
   --secondary-foreground: 220 20% 20%;
 
-  --muted: 220 14% 93%;
+  --muted: 220 14% 96%;
   --muted-foreground: 215 12% 45%;
 
-  --accent: 220 14% 92%;
+  --accent: 220 14% 96%;
   --accent-foreground: 220 20% 15%;
 
   --destructive: 0 72% 51%;
@@ -204,22 +205,30 @@
   --success: 145 65% 38%;
   --warning: 38 92% 48%;
 
-  --border: 220 14% 88%;
-  --input: 220 14% 91%;
-  --ring: 210 100% 50%;
+  --border: 220 14% 92%;
+  --input: 220 14% 94%;
+  --ring: 275 100% 60%;
 
-  --sidebar-background: 220 18% 96%;
+  --sidebar-background: 0 0% 100%;
   --sidebar-foreground: 215 12% 40%;
-  --sidebar-primary: 210 100% 50%;
+  --sidebar-primary: 275 100% 60%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 220 14% 91%;
+  --sidebar-accent: 220 14% 96%;
   --sidebar-accent-foreground: 220 20% 15%;
-  --sidebar-border: 220 14% 86%;
-  --sidebar-ring: 210 100% 50%;
+  --sidebar-border: 220 14% 92%;
+  --sidebar-ring: 275 100% 60%;
 
-  --gradient-primary: linear-gradient(135deg, hsl(210 100% 50%), hsl(220 100% 60%));
-  --gradient-glow: linear-gradient(135deg, hsl(210 100% 50% / 0.10), hsl(260 80% 60% / 0.06));
-  --shadow-glow: 0 0 20px hsl(210 100% 50% / 0.12);
+  /* Kortex overrides for light theme (Roxo Neon + Azul Piscina) */
+  --kortex-orange: 275 100% 60%;
+  --kortex-orange-light: 185 100% 50%;
+  --kortex-dark: 210 20% 98%;
+  --kortex-darker: 0 0% 100%;
+  --kortex-card: 0 0% 100%;
+  --kortex-text-muted: 215 12% 45%;
+
+  --gradient-primary: linear-gradient(135deg, hsl(275 100% 60%), hsl(185 100% 50%));
+  --gradient-glow: linear-gradient(135deg, hsl(275 100% 60% / 0.15), hsl(185 100% 50% / 0.15));
+  --shadow-glow: 0 0 20px hsl(275 100% 60% / 0.15);
 }
 
 /* Light + accent overrides */
@@ -331,6 +340,61 @@
   --gradient-primary: linear-gradient(135deg, hsl(192 91% 46%), hsl(205 88% 52%));
   --gradient-glow: linear-gradient(135deg, hsl(192 91% 46% / 0.15), hsl(205 88% 52% / 0.08));
   --shadow-glow: 0 0 20px hsl(192 91% 46% / 0.18);
+}
+
+[data-theme="neon"] {
+  --background: 0 0% 100%;
+  --foreground: 220 20% 12%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 220 20% 12%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 20% 12%;
+
+  /* Roxo Neon */
+  --primary: 275 100% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 220 14% 96%;
+  --secondary-foreground: 220 20% 20%;
+
+  --muted: 220 14% 96%;
+  --muted-foreground: 215 12% 45%;
+
+  --accent: 220 14% 96%;
+  --accent-foreground: 220 20% 15%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --success: 145 65% 38%;
+  --warning: 38 92% 48%;
+
+  --border: 220 14% 92%;
+  --input: 220 14% 94%;
+  --ring: 275 100% 60%;
+
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 215 12% 40%;
+  --sidebar-primary: 275 100% 60%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 220 14% 96%;
+  --sidebar-accent-foreground: 220 20% 15%;
+  --sidebar-border: 220 14% 92%;
+  --sidebar-ring: 275 100% 60%;
+
+  /* Kortex overrides for light theme (Roxo Neon + Azul Piscina) */
+  --kortex-orange: 275 100% 60%;
+  --kortex-orange-light: 185 100% 50%;
+  --kortex-dark: 210 20% 98%;
+  --kortex-darker: 0 0% 100%;
+  --kortex-card: 0 0% 100%;
+  --kortex-text-muted: 215 12% 45%;
+
+  --gradient-primary: linear-gradient(135deg, hsl(275 100% 60%), hsl(185 100% 50%));
+  --gradient-glow: linear-gradient(135deg, hsl(275 100% 60% / 0.15), hsl(185 100% 50% / 0.15));
+  --shadow-glow: 0 0 20px hsl(275 100% 60% / 0.15);
 }
 
 /* ---- Base styles ---- */
@@ -500,19 +564,18 @@ body {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 16px 36px;
-  border: 1px solid hsl(var(--kortex-orange) / 0.5);
-  background: linear-gradient(180deg, hsl(var(--kortex-orange) / 0.08), transparent);
+  gap: 10px;
+  border: 1px solid hsl(var(--kortex-orange) / 0.4);
+  background: linear-gradient(180deg, hsl(var(--kortex-orange) / 0.12), transparent);
   border-radius: 100px;
   font-weight: 600;
   letter-spacing: 0.02em;
   color: #ffffff;
-  box-shadow: 0 0 0 0 hsl(var(--kortex-orange) / 0.4), inset 0 0 20px hsl(var(--kortex-orange) / 0.1);
+  box-shadow: 0 0 0 0 hsl(var(--kortex-orange) / 0.4), inset 0 0 20px hsl(var(--kortex-orange) / 0.05);
   cursor: pointer;
   overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  backdrop-filter: blur(8px);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  backdrop-filter: blur(12px);
 }
 
 .animated-button svg {

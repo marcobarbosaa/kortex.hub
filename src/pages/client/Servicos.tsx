@@ -7,6 +7,12 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { supabase } from '@/integrations/client';
+import { useAuth } from '@/components/AuthProvider';
+import { toast } from 'sonner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Loader2 } from 'lucide-react';
 
 const ALL_SERVICES = [
   {
@@ -35,35 +41,58 @@ const ALL_SERVICES = [
     color: 'text-red-400',
     bg: 'bg-red-500/10',
     free: true,
-  },
-  {
-    id: 'consultoria',
-    title: 'Consultoria Estratégica',
-    description: 'Análise profunda do seu negócio com plano de ação personalizado para escalar resultados.',
-    icon: BarChart3,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10',
-    free: false,
-  },
-  {
-    id: 'ia',
-    title: 'IA Avançada',
-    description: 'Agentes de IA dedicados, automação generativa e insights preditivos para seu crescimento.',
-    icon: Cpu,
-    color: 'text-violet-400',
-    bg: 'bg-violet-500/10',
-    free: false,
-  },
+  }
 ];
 
 const Servicos = () => {
   const { onboardingData } = useOnboardingGuard();
   const navigate = useNavigate();
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const { user } = useAuth();
+  const [selectedService, setSelectedService] = useState<typeof ALL_SERVICES[0] | null>(null);
 
   const unlocked = onboardingData.servicesUnlocked || 2;
   const isPremium = onboardingData.isPremium;
 
+  const requestService = useMutation({
+    mutationFn: async (details: { name: string; description: string }) => {
+      const { data, error } = await supabase.from('projects').insert({
+        client_id: user!.id,
+        name: `[Solicitação] ${selectedService?.title} - ${details.name}`,
+        description: details.description,
+        status: 'paused',
+      }).select();
+      
+      if (error) throw error;
+      
+      // Notificar o próprio cliente sobre a solicitação
+      await supabase.from('notifications').insert({
+        user_id: user!.id,
+        title: 'Nova Solicitação Recebida',
+        message: `Recebemos o seu briefing para "${details.name}". Em breve entraremos em contato.`,
+        is_read: false
+      });
+
+      return data;
+    },
+    onSuccess: () => {
+      toast.success('Solicitação enviada com sucesso!', {
+        description: 'Nossa equipe avaliará o escopo e entrará em contato em breve.'
+      });
+      setSelectedService(null);
+    },
+    onError: (err: any) => {
+      toast.error('Erro ao enviar solicitação', { description: err.message });
+    }
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    requestService.mutate({
+      name: fd.get('name') as string,
+      description: fd.get('description') as string,
+    });
+  };
   return (
     <ClientLayout
       title="Serviços Kortex"
@@ -96,17 +125,14 @@ const Servicos = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {ALL_SERVICES.map((service, idx) => {
           const isLocked = !isPremium && !service.free && idx >= unlocked;
-          const isExpanded = expandedId === service.id;
-
           return (
             <div
               key={service.id}
               className={cn(
                 'glass-card rounded-xl glow-border transition-all duration-300 cursor-pointer group relative overflow-hidden',
-                isLocked ? 'opacity-60 grayscale-[30%]' : 'hover:scale-[1.02]',
-                isExpanded && 'ring-1 ring-primary/30'
+                isLocked ? 'opacity-60 grayscale-[30%]' : 'hover:scale-[1.02] hover:ring-1 hover:ring-primary/30'
               )}
-              onClick={() => !isLocked && setExpandedId(isExpanded ? null : service.id)}
+              onClick={() => !isLocked && setSelectedService(service)}
             >
               {/* Lock overlay */}
               {isLocked && (
@@ -148,6 +174,49 @@ const Servicos = () => {
           );
         })}
       </div>
+
+      {/* Modal de Briefing */}
+      <Dialog open={!!selectedService} onOpenChange={(open) => !open && setSelectedService(null)}>
+        <DialogContent className="sm:max-w-[425px] bg-[#0A0A0A] border-border/50 text-foreground">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-lg">
+              {selectedService && <selectedService.icon className={cn("h-5 w-5", selectedService.color)} />}
+              Solicitar {selectedService?.title}
+            </DialogTitle>
+            <DialogDescription className="text-xs">
+              Preencha os detalhes básicos para que nossa equipe entenda sua necessidade e monte um escopo.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Nome do Projeto / Demanda</label>
+              <input 
+                required 
+                name="name" 
+                className="w-full bg-muted/50 border border-border/50 rounded-md p-2.5 text-sm outline-none focus:ring-1 focus:ring-primary" 
+                placeholder="Ex: Landing Page para Evento" 
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Descreva o que você precisa</label>
+              <textarea 
+                required
+                name="description" 
+                rows={4} 
+                className="w-full bg-muted/50 border border-border/50 rounded-md p-2.5 text-sm resize-none outline-none focus:ring-1 focus:ring-primary" 
+                placeholder="Quais são os objetivos principais? Tem alguma referência?" 
+              />
+            </div>
+            <button 
+              type="submit" 
+              disabled={requestService.isPending} 
+              className="w-full bg-primary text-primary-foreground py-2.5 rounded-lg font-bold uppercase tracking-wider text-xs hover:bg-primary/90 transition-colors mt-4 flex justify-center items-center gap-2"
+            >
+              {requestService.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Enviar Solicitação'}
+            </button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </ClientLayout>
   );
 };

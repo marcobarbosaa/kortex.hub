@@ -24,7 +24,7 @@ const WhyKortexSection = () => {
   const cardsRef = useStaggerReveal<HTMLDivElement>();
 
   return (
-    <section id="services" className="section-padding bg-[#111111] relative">
+    <section id="services" className="section-padding bg-muted/50 relative">
       <div className="max-w-[1200px] mx-auto text-center">
         <div ref={headerRef}>
           <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-kortex-orange/10 text-kortex-orange border border-kortex-orange/20 mb-6">

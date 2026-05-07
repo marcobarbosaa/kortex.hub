@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useNavigate } from "react-router-dom";
+import { ColorModeToggle } from "@/components/ColorModeToggle";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -27,26 +28,38 @@ const Navbar = () => {
         scrolled ? "bg-background/80 backdrop-blur-xl border-b border-border" : "bg-transparent"
       }`}
     >
-      <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
-        <span className="font-heading text-xl tracking-tight text-foreground">
+      <div className="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between">
+        <span 
+          className="font-heading text-2xl tracking-tighter text-foreground cursor-pointer transition-opacity hover:opacity-80"
+          onClick={() => navigate('/')}
+        >
           KORTEX
         </span>
 
-        <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
+        <div className="hidden md:flex items-center gap-10">
+          <div className="flex items-center gap-8">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="text-[13px] uppercase tracking-widest font-semibold text-muted-foreground hover:text-kortex-orange transition-colors"
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
 
-        <Button variant="hero" size="default" className="hidden md:inline-flex rounded-full" onClick={() => navigate('/register')}>
-          Começar agora
-        </Button>
+          <div className="flex items-center gap-4">
+            <ColorModeToggle />
+            <Button 
+              variant="hero" 
+              className="rounded-full h-11 px-8 text-[13px] uppercase tracking-wider font-bold shadow-[0_0_20px_rgba(255,106,0,0.1)] hover:shadow-[0_0_25px_rgba(255,106,0,0.2)]" 
+              onClick={() => navigate('/register')}
+            >
+              Começar agora
+            </Button>
+          </div>
+        </div>
 
         <Sheet>
           <SheetTrigger asChild>
@@ -66,7 +79,14 @@ const Navbar = () => {
                   {item.label}
                 </a>
               ))}
-              <Button variant="hero" className="rounded-full mt-4 w-full" onClick={() => navigate('/register')}>
+              <div className="flex justify-center mt-4">
+                <ColorModeToggle />
+              </div>
+              <Button 
+                variant="hero" 
+                className="rounded-full h-11 w-full text-[13px] uppercase tracking-wider font-bold" 
+                onClick={() => navigate('/register')}
+              >
                 Começar agora
               </Button>
             </div>

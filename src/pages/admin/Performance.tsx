@@ -1,6 +1,8 @@
 import { AdminLayout } from "@/components/AdminLayout";
 import { TrendingUp, ArrowUpRight, ArrowDownRight, Eye, MousePointerClick, Clock, Target, BarChart3 } from "lucide-react";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/client";
 
 const trafficData = [
   { day: "Seg", organico: 420, pago: 680 },
@@ -17,13 +19,7 @@ const conversionData = [
   { month: "Abr", taxa: 4.1 }, { month: "Mai", taxa: 4.4 }, { month: "Jun", taxa: 4.8 }, { month: "Jul", taxa: 5.1 },
 ];
 
-const channels = [
-  { name: "Google Ads", spend: "R$ 12.400", leads: 186, cpl: "R$ 66,67", roas: "4.2x", trend: "up" },
-  { name: "Meta Ads", spend: "R$ 8.900", leads: 142, cpl: "R$ 62,68", roas: "3.8x", trend: "up" },
-  { name: "Google Orgânico", spend: "—", leads: 98, cpl: "—", roas: "—", trend: "up" },
-  { name: "Instagram Orgânico", spend: "—", leads: 64, cpl: "—", roas: "—", trend: "down" },
-  { name: "Email Marketing", spend: "R$ 1.200", leads: 73, cpl: "R$ 16,44", roas: "8.1x", trend: "up" },
-];
+
 
 const metrics = [
   { label: "Sessões Totais", value: "32.4k", change: "+14%", trend: "up", icon: Eye },
@@ -32,7 +28,37 @@ const metrics = [
   { label: "Tempo Médio", value: "3m 42s", change: "+12s", trend: "up", icon: Clock },
 ];
 
-const Performance = () => (
+const Performance = () => {
+  const { data: campaigns, isLoading } = useQuery({
+    queryKey: ['admin-campaigns-performance'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('campaigns').select('*');
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  const dynamicChannels: Array<{ name: string; spend: string; leads: string; cpl: string; roas: string; trend: string }> = [];
+  if (campaigns) {
+    const grouped = campaigns.reduce((acc, c) => {
+      if (!acc[c.platform]) acc[c.platform] = { spend: 0 };
+      acc[c.platform].spend += Number(c.spent || 0);
+      return acc;
+    }, {} as Record<string, { spend: number }>);
+    
+    Object.entries(grouped).forEach(([platform, data]) => {
+      dynamicChannels.push({
+        name: platform,
+        spend: `R$ ${data.spend.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+        leads: "Em breve",
+        cpl: "Em breve",
+        roas: "Em breve",
+        trend: "up"
+      });
+    });
+  }
+
+  return (
   <AdminLayout searchPlaceholder="Buscar...">
     <div className="p-6 space-y-6">
       <div>
@@ -118,7 +144,11 @@ const Performance = () => (
                   </tr>
                 </thead>
                 <tbody>
-                  {channels.map((ch) => (
+                  {isLoading ? (
+                    <tr><td colSpan={6} className="py-8 text-center text-muted-foreground">Carregando dados...</td></tr>
+                  ) : dynamicChannels.length === 0 ? (
+                    <tr><td colSpan={6} className="py-8 text-center text-muted-foreground">Nenhuma campanha registrada no sistema.</td></tr>
+                  ) : dynamicChannels.map((ch) => (
                     <tr key={ch.name} className="border-b border-border/30 last:border-0 hover:bg-accent/30 transition-colors">
                       <td className="py-3 text-foreground font-medium">{ch.name}</td>
                       <td className="py-3 text-muted-foreground">{ch.spend}</td>
@@ -136,6 +166,7 @@ const Performance = () => (
           </div>
     </div>
   </AdminLayout>
-);
+  );
+};
 
 export default Performance;
