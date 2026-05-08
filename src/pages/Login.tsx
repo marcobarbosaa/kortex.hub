@@ -29,7 +29,13 @@ const Login = () => {
       }
 
       toast.success('Login realizado com sucesso!');
-      navigate('/cliente');
+      
+      const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
+      if (email === adminEmail) {
+        navigate('/admin');
+      } else {
+        navigate('/cliente');
+      }
     } catch (error: any) {
       toast.error(error.message || 'Erro ao fazer login. Verifique suas credenciais.');
       console.error(error);

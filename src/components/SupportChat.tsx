@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { MessageSquare, X, Send, Bot } from "lucide-react";
 
 interface Message {
@@ -63,7 +64,7 @@ export function SupportChat() {
     }, 1200 + Math.random() * 800);
   };
 
-  return (
+  return createPortal(
     <>
       {/* FAB */}
       {!open && (
@@ -157,6 +158,7 @@ export function SupportChat() {
           </div>
         </div>
       )}
-    </>
+    </>,
+    document.body
   );
 }

@@ -114,8 +114,8 @@ const Financial = () => {
                   </span>
                   <span className={cn("text-xs font-medium px-2.5 py-0.5 rounded-full",
                     inv.status === "paid" ? "bg-success/10 text-success" :
-                    inv.status === "overdue" ? "bg-destructive/10 text-destructive" :
-                    "bg-warning/10 text-warning"
+                      inv.status === "overdue" ? "bg-destructive/10 text-destructive" :
+                        "bg-warning/10 text-warning"
                   )}>
                     {STATUS_LABEL[inv.status || 'pending']}
                   </span>
@@ -141,10 +141,10 @@ const Financial = () => {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { label: "Projetos simultâneos", value: "5",              max: "5" },
-            { label: "Entregas/mês",          value: "12",             max: "20" },
-            { label: "Relatórios",            value: "4",              max: "ilimitado" },
-            { label: "Suporte",               value: "Prioritário",    max: "" },
+            { label: "Projetos simultâneos", value: "5", max: "5" },
+            { label: "Entregas/mês", value: "12", max: "20" },
+            { label: "Relatórios", value: "4", max: "ilimitado" },
+            { label: "Suporte", value: "Prioritário", max: "" },
           ].map((f) => (
             <div key={f.label} className="p-3 rounded-lg bg-muted/30">
               <p className="text-sm font-semibold text-foreground">

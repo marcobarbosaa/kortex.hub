@@ -28,13 +28,18 @@ export const ProtectedRoute = ({ children, requireAdmin = false, skipOnboardingG
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (requireAdmin && profile?.role !== 'admin') {
-    // Se a rota exige admin e o usuário não é, manda pro dashboard de cliente
+  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
+  const isMasterAdmin = session?.user?.email === adminEmail;
+  const hasAdminRole = profile?.role === 'admin';
+
+  if (requireAdmin && !hasAdminRole && !isMasterAdmin) {
+    // Se a rota exige admin e o usuário não é admin no DB nem o e-mail mestre, manda pro dashboard de cliente
     return <Navigate to="/cliente" replace />;
   }
 
   // Guard de onboarding: redireciona para a etapa correta se não completou
-  if (!skipOnboardingGuard && !requireAdmin) {
+  // EXCEÇÃO: Admins não precisam passar pelo onboarding
+  if (!skipOnboardingGuard && !requireAdmin && !isMasterAdmin && !hasAdminRole) {
     const redirectPath = getRedirectPath();
     const currentPath = location.pathname;
 

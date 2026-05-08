@@ -39,9 +39,9 @@ const Upgrade = () => {
     try {
       setIsLoading(true);
       toast.loading('Preparando checkout...', { id: 'checkout' });
-      
+
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { 
+        body: {
           priceId: 'price_test_123', // Replace with real Stripe Price ID
           email: user?.email,
           mode: 'subscription'

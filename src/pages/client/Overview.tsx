@@ -2,13 +2,10 @@ import { ClientLayout } from "@/components/ClientLayout";
 import { RetentionBanner } from "@/components/RetentionBanner";
 import {
   Briefcase, CheckCircle2, Clock, TrendingUp, Bell,
-  FileText, Calendar, ArrowUpRight, AlertTriangle,
+  ArrowUpRight, AlertTriangle,
   BadgeCheck, Activity, Receipt,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-} from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/client";
 import { useAuth } from "@/components/AuthProvider";
@@ -83,10 +80,6 @@ const Overview = () => {
 
   const nome = profile?.full_name?.split(' ')[0] || 'Cliente';
 
-  // Dados simples para o gráfico baseado nos projetos
-  const progressData = [
-    { mes: "Projetos", ativos: activeProjects, concluídos: completedProjects },
-  ];
 
   return (
     <ClientLayout
@@ -110,12 +103,12 @@ const Overview = () => {
       )}
 
       {/* KPI cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: "Projetos Ativos",   value: String(activeProjects),   sub: `${completedProjects} concluído(s)`,      trend: "up",   icon: Briefcase,    color: "text-primary", bg: "bg-primary/10" },
-          { label: "Campanhas",         value: String(campaigns?.length || 0), sub: `${campaigns?.filter(c => c.status === 'active').length || 0} ativa(s)`, trend: "up", icon: TrendingUp, color: "text-success", bg: "bg-success/10" },
-          { label: "Faturas Pendentes", value: String(pendingInvoices), sub: pendingInvoices > 0 ? "Atenção" : "Tudo em dia",  trend: pendingInvoices > 0 ? "warn" : "up", icon: Clock,   color: pendingInvoices > 0 ? "text-warning" : "text-success", bg: pendingInvoices > 0 ? "bg-warning/10" : "bg-success/10" },
-          { label: "Tickets Abertos",   value: String(openTickets),   sub: openTickets > 0 ? "Em andamento" : "Nenhum",        trend: openTickets > 0 ? "warn" : "up",   icon: CheckCircle2,   color: openTickets > 0 ? "text-warning" : "text-success", bg: openTickets > 0 ? "bg-warning/10" : "bg-success/10" },
+          { label: "Projetos Ativos", value: String(activeProjects), sub: `${completedProjects} concluído(s)`, trend: "up", icon: Briefcase, color: "text-primary", bg: "bg-primary/10" },
+          { label: "Campanhas", value: String(campaigns?.length || 0), sub: `${campaigns?.filter(c => c.status === 'active').length || 0} ativa(s)`, trend: "up", icon: TrendingUp, color: "text-success", bg: "bg-success/10" },
+          { label: "Faturas Pendentes", value: String(pendingInvoices), sub: pendingInvoices > 0 ? "Atenção" : "Tudo em dia", trend: pendingInvoices > 0 ? "warn" : "up", icon: Clock, color: pendingInvoices > 0 ? "text-warning" : "text-success", bg: pendingInvoices > 0 ? "bg-warning/10" : "bg-success/10" },
+          { label: "Tickets Abertos", value: String(openTickets), sub: openTickets > 0 ? "Em andamento" : "Nenhum", trend: openTickets > 0 ? "warn" : "up", icon: CheckCircle2, color: openTickets > 0 ? "text-warning" : "text-success", bg: openTickets > 0 ? "bg-warning/10" : "bg-success/10" },
         ].map((c) => (
           <div key={c.label} className="glass-card rounded-xl p-5 glow-border">
             <div className={cn("h-9 w-9 rounded-lg flex items-center justify-center mb-3", c.bg)}>

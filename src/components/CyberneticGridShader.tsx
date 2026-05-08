@@ -15,7 +15,7 @@ const CyberneticGridShader = () => {
 
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
 
     // 2) GLSL Shaders
     const vertexShader = `
@@ -127,7 +127,8 @@ const CyberneticGridShader = () => {
 
     // 6) Animation loop
     renderer.setAnimationLoop(() => {
-      uniforms.iTime.value = clock.getElapsedTime();
+      timer.update();
+      uniforms.iTime.value = timer.getElapsed();
       
       const isLight = document.documentElement.classList.contains('light');
       if (isLight) {

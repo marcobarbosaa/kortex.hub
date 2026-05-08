@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ClientLayout } from '@/components/ClientLayout';
 import { useOnboardingGuard } from '@/hooks/useOnboardingGuard';
 import {
-  Layout, Code2, Settings2, BarChart3, Cpu,
+  Layout, Code2, Settings2,
   Lock, ChevronRight, Sparkles, Crown
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -61,9 +61,9 @@ const Servicos = () => {
         description: details.description,
         status: 'paused',
       }).select();
-      
+
       if (error) throw error;
-      
+
       // Notificar o próprio cliente sobre a solicitação
       await supabase.from('notifications').insert({
         user_id: user!.id,
@@ -107,7 +107,7 @@ const Servicos = () => {
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-foreground">Descubra mais funcionalidades</p>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Você tem acesso a {unlocked} de {ALL_SERVICES.length} serviços. 
+              Você tem acesso a {unlocked} de {ALL_SERVICES.length} serviços.
               Use o sistema e desbloqueie novos módulos automaticamente.
             </p>
           </div>
@@ -190,26 +190,26 @@ const Servicos = () => {
           <form onSubmit={handleSubmit} className="space-y-4 mt-2">
             <div className="space-y-2">
               <label className="text-sm font-medium">Nome do Projeto / Demanda</label>
-              <input 
-                required 
-                name="name" 
-                className="w-full bg-muted/50 border border-border/50 rounded-md p-2.5 text-sm outline-none focus:ring-1 focus:ring-primary" 
-                placeholder="Ex: Landing Page para Evento" 
+              <input
+                required
+                name="name"
+                className="w-full bg-muted/50 border border-border/50 rounded-md p-2.5 text-sm outline-none focus:ring-1 focus:ring-primary"
+                placeholder="Ex: Landing Page para Evento"
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Descreva o que você precisa</label>
-              <textarea 
+              <textarea
                 required
-                name="description" 
-                rows={4} 
-                className="w-full bg-muted/50 border border-border/50 rounded-md p-2.5 text-sm resize-none outline-none focus:ring-1 focus:ring-primary" 
-                placeholder="Quais são os objetivos principais? Tem alguma referência?" 
+                name="description"
+                rows={4}
+                className="w-full bg-muted/50 border border-border/50 rounded-md p-2.5 text-sm resize-none outline-none focus:ring-1 focus:ring-primary"
+                placeholder="Quais são os objetivos principais? Tem alguma referência?"
               />
             </div>
-            <button 
-              type="submit" 
-              disabled={requestService.isPending} 
+            <button
+              type="submit"
+              disabled={requestService.isPending}
               className="w-full bg-primary text-primary-foreground py-2.5 rounded-lg font-bold uppercase tracking-wider text-xs hover:bg-primary/90 transition-colors mt-4 flex justify-center items-center gap-2"
             >
               {requestService.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Enviar Solicitação'}

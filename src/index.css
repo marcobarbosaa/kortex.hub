@@ -8,6 +8,11 @@
   text-shadow: 0 0 8px hsl(24 100% 50% / 0.5);
 }
 
+.light ::selection {
+  color: hsl(275 100% 60%);
+  text-shadow: 0 0 8px hsl(275 100% 60% / 0.5);
+}
+
 /* Highlight específico para textos que JÁ são laranjas */
 .text-kortex-orange::selection,
 .text-gradient-orange::selection,
@@ -15,6 +20,13 @@
   background-color: transparent;
   color: #ffffff;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.light .text-kortex-orange::selection,
+.light .text-gradient-orange::selection,
+.light .text-primary::selection {
+  color: hsl(220 20% 12%);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 ::-moz-selection {
@@ -229,6 +241,24 @@
   --gradient-primary: linear-gradient(135deg, hsl(275 100% 60%), hsl(185 100% 50%));
   --gradient-glow: linear-gradient(135deg, hsl(275 100% 60% / 0.15), hsl(185 100% 50% / 0.15));
   --shadow-glow: 0 0 20px hsl(275 100% 60% / 0.15);
+}
+
+/* Garante contraste para botões no modo claro */
+.light .animated-button {
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--primary) / 0.4);
+}
+
+.light .animated-button svg {
+  fill: hsl(var(--foreground));
+}
+
+.light .animated-button:hover .text {
+  color: #ffffff;
+}
+
+.light .animated-button:hover svg {
+  fill: #ffffff;
 }
 
 /* Light + accent overrides */
@@ -468,6 +498,15 @@ body {
     animation: text-shine-1 6s linear infinite;
   }
 
+  .light .text-gradient-foreground {
+    background-image: linear-gradient(110deg,
+        hsl(var(--foreground)) 0%,
+        hsl(var(--foreground)) 40%,
+        hsl(185 100% 50%) 50%,
+        hsl(var(--foreground)) 60%,
+        hsl(var(--foreground)) 100%);
+  }
+
   .glow-orange {
     box-shadow: 0 0 60px rgba(255, 106, 0, 0.15), 0 0 120px rgba(255, 106, 0, 0.05);
   }
@@ -581,7 +620,7 @@ body {
 .animated-button svg {
   position: absolute;
   width: 18px;
-  fill: #ffffff;
+  fill: currentColor;
   z-index: 9;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -632,7 +671,7 @@ body {
 }
 
 .animated-button:hover svg {
-  fill: #ffffff;
+  fill: currentColor;
 }
 
 .animated-button:active {

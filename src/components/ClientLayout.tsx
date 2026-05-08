@@ -8,7 +8,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useColorMode } from "@/hooks/useColorMode";
 import { useAuth } from "@/components/AuthProvider";
 import {
-  LayoutDashboard, Briefcase, BarChart3, CreditCard,
+  LayoutDashboard, Briefcase, CreditCard,
   MessageSquare, LogOut, PanelLeft, Layers, Crown,
 } from "lucide-react";
 import { NotificationPopover } from "./NotificationPopover";
@@ -21,17 +21,17 @@ interface ClientLayoutProps {
 
 const NAV = [
   { label: "Visão Geral", icon: LayoutDashboard, url: "/cliente" },
-  { label: "Projetos",    icon: Briefcase,        url: "/cliente/projetos" },
-  { label: "Financeiro",  icon: CreditCard,        url: "/cliente/financeiro" },
-  { label: "Serviços",    icon: Layers,            url: "/cliente/servicos" },
-  { label: "Suporte",     icon: MessageSquare,     url: "/cliente/suporte" },
-  { label: "Upgrade",     icon: Crown,             url: "/cliente/upgrade" },
+  { label: "Projetos", icon: Briefcase, url: "/cliente/projetos" },
+  { label: "Financeiro", icon: CreditCard, url: "/cliente/financeiro" },
+  { label: "Serviços", icon: Layers, url: "/cliente/servicos" },
+  { label: "Suporte", icon: MessageSquare, url: "/cliente/suporte" },
+  { label: "Upgrade", icon: Crown, url: "/cliente/upgrade" },
 ];
 
 export function ClientLayout({ children, title, description }: ClientLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 768);
   const { profile, user, signOut } = useAuth();
   useTheme();
   useColorMode();
@@ -78,13 +78,22 @@ export function ClientLayout({ children, title, description }: ClientLayoutProps
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative w-full min-w-0">
+        {/* Mobile Overlay */}
+        {sidebarOpen && (
+          <div 
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm z-30 md:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
         {/* ── Sidebar ── */}
         <aside
           className={cn(
             "h-full shrink-0 border-r border-border/50 flex flex-col transition-all duration-200 ease-linear overflow-y-auto",
             "bg-[hsl(var(--sidebar-background))]",
-            sidebarOpen ? "w-52" : "w-14"
+            "absolute z-40 md:relative",
+            sidebarOpen ? "w-52 translate-x-0" : "-translate-x-full md:translate-x-0 md:w-14"
           )}
         >
           <div className="flex-1 py-4 px-2 space-y-0.5">
@@ -152,12 +161,12 @@ export function ClientLayout({ children, title, description }: ClientLayoutProps
         </aside>
 
         {/* ── Page content ── */}
-        <main className="flex-1 overflow-auto bg-background">
-          <div className="p-6 space-y-6 max-w-6xl">
+        <main className="flex-1 flex flex-col min-w-0 overflow-x-hidden overflow-y-auto bg-background w-full">
+          <div className="p-4 sm:p-6 space-y-6 w-full max-w-6xl mx-auto">
             <div>
-              <h1 className="text-2xl font-bold text-foreground tracking-tight">{title}</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">{title}</h1>
               {description && (
-                <p className="text-sm text-muted-foreground mt-1">{description}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">{description}</p>
               )}
             </div>
             {children}

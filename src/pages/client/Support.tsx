@@ -83,29 +83,59 @@ const Support = () => {
                     <Plus className="h-3.5 w-3.5" /> Novo Chamado
                   </button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] bg-[#0A0A0A] border-border/50 text-foreground">
+                <DialogContent className="sm:max-w-[450px] w-[95vw] rounded-2xl bg-background border border-border shadow-2xl p-5 sm:p-6 text-foreground max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>Abrir Novo Chamado</DialogTitle>
+                    <DialogTitle className="text-xl font-bold tracking-tight text-center sm:text-left">Abrir Novo Chamado</DialogTitle>
+                    <p className="text-xs text-muted-foreground mt-1 text-center sm:text-left">
+                      Descreva seu problema e nossa equipe responderá o mais rápido possível.
+                    </p>
                   </DialogHeader>
                   <form onSubmit={handleCreate} className="space-y-4 mt-4">
-                    <div className="space-y-1">
-                      <label className="text-xs font-medium">Assunto</label>
-                      <input required name="subject" className="w-full bg-muted/50 border border-border/50 rounded-md p-2 text-sm" placeholder="Ex: Dúvida sobre fatura" />
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-foreground/80 uppercase tracking-wider">Assunto</label>
+                      <input 
+                        required 
+                        name="subject" 
+                        className="w-full bg-accent/50 border border-border rounded-lg px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all focus:bg-background" 
+                        placeholder="Ex: Dúvida sobre fatura" 
+                      />
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-medium">Prioridade</label>
-                      <select name="priority" className="w-full bg-muted/50 border border-border/50 rounded-md p-2 text-sm text-foreground">
-                        <option value="low">Baixa</option>
-                        <option value="medium">Média</option>
-                        <option value="high">Alta</option>
-                      </select>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-foreground/80 uppercase tracking-wider">Prioridade</label>
+                      <div className="relative">
+                        <select 
+                          name="priority" 
+                          className="w-full appearance-none bg-accent/50 border border-border rounded-lg px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all focus:bg-background"
+                        >
+                          <option value="low">Baixa - Dúvida geral</option>
+                          <option value="medium">Média - Problema que não impede o uso</option>
+                          <option value="high">Alta - Sistema fora do ar ou crítico</option>
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground">
+                          <ChevronRight className="h-4 w-4 rotate-90" />
+                        </div>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-medium">Descrição</label>
-                      <textarea required name="description" rows={4} className="w-full bg-muted/50 border border-border/50 rounded-md p-2 text-sm resize-none" placeholder="Descreva seu problema..." />
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-foreground/80 uppercase tracking-wider">Descrição</label>
+                      <textarea 
+                        required 
+                        name="description" 
+                        rows={4} 
+                        className="w-full bg-accent/50 border border-border rounded-lg px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all focus:bg-background" 
+                        placeholder="Descreva seu problema com o máximo de detalhes..." 
+                      />
                     </div>
-                    <button type="submit" disabled={createTicket.isPending} className="w-full bg-primary text-primary-foreground py-2.5 rounded-md font-medium hover:bg-primary/90 transition-colors mt-2 flex justify-center items-center">
-                      {createTicket.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Abrir Ticket'}
+                    <button 
+                      type="submit" 
+                      disabled={createTicket.isPending} 
+                      className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-bold hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(var(--primary),0.2)] hover:shadow-[0_0_30px_rgba(var(--primary),0.4)] mt-4 flex justify-center items-center gap-2"
+                    >
+                      {createTicket.isPending ? (
+                        <><Loader2 className="h-4 w-4 animate-spin" /> Processando...</>
+                      ) : (
+                        <><Send className="h-4 w-4" /> Enviar Chamado</>
+                      )}
                     </button>
                   </form>
                 </DialogContent>
@@ -159,9 +189,9 @@ const Support = () => {
             </h2>
             <div className="space-y-2">
               {[
-                { q: "Como acompanho o progresso do meu projeto?",      a: "Na seção 'Projetos' você encontra o status, progresso e todas as entregas de cada projeto em tempo real." },
-                { q: "Onde baixo meus relatórios e arquivos?",          a: "Acesse 'Relatórios' para relatórios mensais ou 'Projetos' para arquivos específicos de cada projeto." },
-                { q: "Como atualizo meus dados de pagamento?",          a: "Entre na seção 'Financeiro' e clique em 'Alterar método de pagamento' abaixo do seu plano atual." },
+                { q: "Como acompanho o progresso do meu projeto?", a: "Na seção 'Projetos' você encontra o status, progresso e todas as entregas de cada projeto em tempo real." },
+                { q: "Onde baixo meus relatórios e arquivos?", a: "Acesse 'Relatórios' para relatórios mensais ou 'Projetos' para arquivos específicos de cada projeto." },
+                { q: "Como atualizo meus dados de pagamento?", a: "Entre na seção 'Financeiro' e clique em 'Alterar método de pagamento' abaixo do seu plano atual." },
               ].map((faq, i) => (
                 <div key={i} className="border border-border/50 rounded-lg overflow-hidden">
                   <button
@@ -186,8 +216,8 @@ const Support = () => {
           {/* Contact channels */}
           <div className="space-y-4">
             {[
-              { icon: Globe,         label: "E-mail Suporte",  desc: "suporte@kortex.com.br" },
-              { icon: Calendar,      label: "Agendar Reunião", desc: "30 ou 60 minutos" },
+              { icon: Globe, label: "E-mail Suporte", desc: "suporte@kortex.com.br" },
+              { icon: Calendar, label: "Agendar Reunião", desc: "30 ou 60 minutos" },
             ].map((c) => (
               <div key={c.label} className="glass-card rounded-xl p-5 glow-border flex items-center gap-4">
                 <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
@@ -209,7 +239,7 @@ const Support = () => {
             <div className="space-y-3">
               {[
                 { label: "Tempo de resposta", value: "≤ 4h úteis" },
-                { label: "Disponibilidade",    value: "Seg–Sex, 9h–18h" },
+                { label: "Disponibilidade", value: "Seg–Sex, 9h–18h" },
               ].map((s) => (
                 <div key={s.label} className="p-3 rounded-lg bg-muted/30">
                   <p className="text-sm font-semibold text-foreground">{s.value}</p>

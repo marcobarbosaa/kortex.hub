@@ -9,15 +9,15 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 const STATUS_COLOR: Record<string, string> = {
-  active:    "bg-primary/10 text-primary",
+  active: "bg-primary/10 text-primary",
   completed: "bg-success/10 text-success",
-  paused:    "bg-warning/10 text-warning",
+  paused: "bg-warning/10 text-warning",
 };
 
 const STATUS_LABEL: Record<string, string> = {
-  active:    "em andamento",
+  active: "em andamento",
   completed: "concluído",
-  paused:    "pausado",
+  paused: "pausado",
 };
 
 type Filter = "Todos" | "active" | "completed" | "paused";

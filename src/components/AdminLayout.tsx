@@ -15,19 +15,28 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ children, searchPlaceholder = "Buscar..." }: AdminLayoutProps) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(window.innerWidth < 768);
   const { profile, user } = useAuth();
   useTheme();     // initialize accent theme from localStorage on mount
   useColorMode(); // initialize dark/light mode from localStorage on mount
 
   return (
-    <div className="flex h-screen w-full overflow-hidden">
+    <div className="flex h-screen w-full overflow-hidden relative min-w-0">
+      {/* Mobile Overlay */}
+      {!collapsed && (
+        <div 
+          className="absolute inset-0 bg-background/80 backdrop-blur-sm z-30 md:hidden"
+          onClick={() => setCollapsed(true)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
         className={cn(
           "h-full shrink-0 border-r overflow-y-auto flex flex-col transition-all duration-200 ease-linear",
           "bg-[hsl(var(--sidebar-background))] border-[hsl(var(--sidebar-border))]",
-          collapsed ? "w-14" : "w-64"
+          "absolute z-40 md:relative",
+          collapsed ? "-translate-x-full md:translate-x-0 md:w-14" : "w-64 translate-x-0"
         )}
       >
         <AppSidebar collapsed={collapsed} />
@@ -71,7 +80,7 @@ export function AdminLayout({ children, searchPlaceholder = "Buscar..." }: Admin
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-auto bg-background">
+        <main className="flex-1 flex flex-col min-w-0 overflow-x-hidden overflow-y-auto bg-background w-full">
           {children}
         </main>
       </div>
