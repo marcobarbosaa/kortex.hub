@@ -60,7 +60,7 @@ function ProfileTab() {
           </div>
           <div>
             <p className="text-sm font-medium text-foreground">João Dias</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Administrador · Kortex Hub</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Administrador · GABS Hub</p>
             <div className="flex gap-2 mt-3">
               <button className="px-3 py-1.5 text-xs rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium">
                 Alterar foto
@@ -81,7 +81,7 @@ function ProfileTab() {
             { label: "Nome completo", value: "João Dias",         icon: User,     type: "text" },
             { label: "E-mail",        value: "joao@kortex.com.br", icon: Mail,     type: "email" },
             { label: "Telefone",      value: "+55 11 98765-4321", icon: Phone,    type: "tel" },
-            { label: "Empresa",       value: "Kortex Agency",     icon: Building2, type: "text" },
+            { label: "Empresa",       value: "GABS Agency",     icon: Building2, type: "text" },
             { label: "Cargo",         value: "Diretor de Marketing", icon: User,  type: "text" },
             { label: "Localização",   value: "São Paulo, SP",     icon: MapPin,   type: "text" },
           ].map((f) => (

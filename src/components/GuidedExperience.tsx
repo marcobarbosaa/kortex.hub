@@ -122,7 +122,7 @@ export function GuidedExperience() {
           <div className="px-4 pb-4">
             <div className="rounded-lg bg-success/10 p-3 text-center">
               <p className="text-xs font-bold text-success">🎉 Parabéns! Você completou tudo!</p>
-              <p className="text-[10px] text-success/70 mt-1">Você agora é um usuário ativo do Kortex.</p>
+              <p className="text-[10px] text-success/70 mt-1">Você agora é um usuário ativo do GABS.</p>
             </div>
           </div>
         )}

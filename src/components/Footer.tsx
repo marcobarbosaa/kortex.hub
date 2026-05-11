@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   const produtoLinks = [
     { label: "Serviços", href: "/#services", isHash: true },
-    { label: "Como funciona", href: "/#how-it-works", isHash: true },
-    { label: "Planos", href: "/#pricing", isHash: true },
+    { label: "Tecnologias", href: "/#tech", isHash: true },
+    { label: "Consultoria", href: "/#consultancy", isHash: true },
     { label: "Cases", href: "/cases", isHash: false },
   ];
 
@@ -26,7 +26,7 @@ const Footer = () => {
       <div className="max-w-[1200px] mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div>
-            <span className="font-heading text-xl text-foreground">KORTEX</span>
+            <span className="font-heading text-xl text-foreground">GABS</span>
             <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
               Estratégia, design e tecnologia combinados em um único sistema de crescimento.
             </p>
@@ -92,7 +92,7 @@ const Footer = () => {
 
         <div className="border-t border-foreground/[0.06] pt-8 text-center">
           <p className="text-xs text-muted-foreground">
-            © 2026 Kortex. Todos os direitos reservados.
+            © 2026 GABS. Todos os direitos reservados.
           </p>
         </div>
       </div>

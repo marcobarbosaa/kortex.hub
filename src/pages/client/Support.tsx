@@ -216,7 +216,7 @@ const Support = () => {
           {/* Contact channels */}
           <div className="space-y-4">
             {[
-              { icon: Globe, label: "E-mail Suporte", desc: "suporte@kortex.com.br" },
+              { icon: Globe, label: "E-mail Suporte", desc: "suporte@usegabs.com" },
               { icon: Calendar, label: "Agendar Reunião", desc: "30 ou 60 minutos" },
             ].map((c) => (
               <div key={c.label} className="glass-card rounded-xl p-5 glow-border flex items-center gap-4">

@@ -2,7 +2,7 @@ import PublicPageLayout from "@/components/PublicPageLayout";
 
 const Carreiras = () => {
   return (
-    <PublicPageLayout title="Carreiras na Kortex" description="Junte-se à equipe que está construindo o futuro do crescimento digital.">
+    <PublicPageLayout title="Carreiras na GABS" description="Junte-se à equipe que está construindo o futuro do crescimento digital.">
       <p className="mb-8">
         Estamos sempre em busca de talentos excepcionais que sejam apaixonados por tecnologia,
         design e performance. Confira nossas vagas abertas abaixo.

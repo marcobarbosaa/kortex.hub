@@ -17,8 +17,8 @@ const Navbar = () => {
 
   const navItems = [
     { label: "Serviços", href: "#services" },
-    { label: "Como funciona", href: "#how-it-works" },
-    { label: "Planos", href: "#pricing" },
+    { label: "Tecnologias", href: "#tech" },
+    { label: "Consultoria", href: "#consultancy" },
     { label: "Contato", href: "#contact" },
   ];
 
@@ -33,7 +33,7 @@ const Navbar = () => {
           className="font-heading text-2xl tracking-tighter text-foreground cursor-pointer transition-opacity hover:opacity-80"
           onClick={() => navigate('/')}
         >
-          KORTEX
+          GABS
         </span>
 
         <div className="hidden md:flex items-center gap-10">

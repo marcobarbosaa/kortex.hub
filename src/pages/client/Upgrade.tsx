@@ -64,7 +64,7 @@ const Upgrade = () => {
   return (
     <ClientLayout
       title="Escolha seu Plano"
-      description="Desbloqueie todo o potencial do Kortex para o seu negócio."
+      description="Desbloqueie todo o potencial do GABS para o seu negócio."
     >
       {/* Social proof */}
       <div className="glass-card rounded-xl p-4 glow-border mb-6 flex items-center gap-3">
@@ -76,7 +76,7 @@ const Upgrade = () => {
           ))}
         </div>
         <p className="text-xs text-muted-foreground">
-          <span className="text-foreground font-semibold">+2.400 empresas</span> já usam o Kortex Premium
+          <span className="text-foreground font-semibold">+2.400 empresas</span> já usam o GABS Premium
         </p>
       </div>
 

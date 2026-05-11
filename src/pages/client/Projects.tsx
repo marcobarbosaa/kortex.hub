@@ -88,7 +88,7 @@ const Projects = () => {
             <div className="glass-card rounded-xl p-8 glow-border text-center">
               <Briefcase className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
               <p className="text-muted-foreground">Nenhum projeto encontrado.</p>
-              <p className="text-xs text-muted-foreground/60 mt-1">Os projetos criados pela Kortex aparecerão aqui.</p>
+              <p className="text-xs text-muted-foreground/60 mt-1">Os projetos criados pela GABS aparecerão aqui.</p>
             </div>
           ) : (
             filtered.map((p) => (

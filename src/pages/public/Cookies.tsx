@@ -10,7 +10,7 @@ const Cookies = () => {
         fornecer informações analíticas aos proprietários do site.
       </p>
       
-      <h2>Como a Kortex utiliza cookies</h2>
+      <h2>Como a GABS utiliza cookies</h2>
       <p>
         Utilizamos cookies de sessão (que expiram ao fechar o navegador) e cookies persistentes (que permanecem 
         no dispositivo) para:
@@ -24,7 +24,7 @@ const Cookies = () => {
       <h2>Gerenciamento</h2>
       <p>
         Você pode controlar e/ou excluir cookies conforme desejar em seu próprio navegador. Note que desativar 
-        cookies estritamente necessários pode afetar a funcionalidade da plataforma Kortex.
+        cookies estritamente necessários pode afetar a funcionalidade da plataforma GABS.
       </p>
     </PublicPageLayout>
   );

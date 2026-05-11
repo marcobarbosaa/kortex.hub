@@ -95,7 +95,7 @@ const Servicos = () => {
   };
   return (
     <ClientLayout
-      title="Serviços Kortex"
+      title="Serviços GABS"
       description="Explore os módulos disponíveis para o seu negócio."
     >
       {/* Liberação progressiva banner */}

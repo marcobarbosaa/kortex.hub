@@ -9,31 +9,74 @@ interface Message {
   time: string;
 }
 
-const autoReplies = [
-  "Olá! Como posso te ajudar hoje? 😊",
-  "Entendi! Vou verificar isso para você. Um momento...",
-  "Seu projeto está progredindo conforme o planejado. Posso detalhar algum ponto específico?",
-  "Claro! Vou encaminhar sua solicitação para o time responsável.",
-  "Obrigado pelo contato! Algo mais em que posso ajudar?",
+import { useNavigate } from "react-router-dom";
+
+const intentKnowledge = [
+  {
+    keywords: ["fatura", "pagamento", "pagar", "boleto", "cartao", "cobrança", "cobranca", "financeiro", "dinheiro"],
+    reply: "Para visualizar ou pagar suas faturas, acesse o menu 'Financeiro' na barra lateral. Lá você encontrará todo o histórico de pagamentos e faturas pendentes."
+  },
+  {
+    keywords: ["projeto", "andamento", "status", "prazo", "entreg", "cronograma", "quando"],
+    reply: "Você pode acompanhar o status e o cronograma de todos os seus projetos na aba 'Projetos'. Lá detalhamos cada etapa da entrega!"
+  },
+  {
+    keywords: ["relatorio", "resultados", "metricas", "desempenho", "dashboard", "grafico"],
+    reply: "Os relatórios de desempenho e métricas principais estão disponíveis na sua 'Visão Geral' (dashboard inicial) e também podem ser baixados na aba de projetos."
+  },
+  {
+    keywords: ["senha", "login", "acesso", "conta", "perfil", "email", "e-mail"],
+    reply: "Para alterar seus dados de acesso ou senha, clique na sua foto de perfil no canto superior direito e acesse suas configurações."
+  },
+  {
+    keywords: ["ola", "olá", "oi", "bom dia", "boa tarde", "boa noite", "ajuda", "suporte", "opa"],
+    reply: "DYNAMIC_GREETING"
+  },
+  {
+    keywords: ["servico", "serviço", "comprar", "contratar", "upgrade", "plano", "aumentar"],
+    reply: "Você pode ver nossos novos serviços e fazer upgrade do seu plano diretamente na aba 'Serviços' ou 'Upgrade' no menu principal."
+  }
 ];
+
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Bom dia";
+  if (hour < 18) return "Boa tarde";
+  return "Boa noite";
+}
+
+function getBotReply(userInput: string) {
+  const normalized = userInput.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  
+  for (const intent of intentKnowledge) {
+    if (intent.keywords.some(kw => normalized.includes(kw))) {
+      if (intent.reply === "DYNAMIC_GREETING") {
+        return `Olá! ${getGreeting()}. Como posso te ajudar hoje? (Ex: 'onde vejo minhas faturas?', 'status do projeto', etc)`;
+      }
+      return intent.reply;
+    }
+  }
+  return null;
+}
 
 const now = () =>
   new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
 export function SupportChat() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 0,
-      text: "Olá! 👋 Sou o assistente Kortex. Como posso ajudar?",
+      text: `Olá! 👋 Sou a Sofia, assistente da GABS. Como posso te ajudar?`,
       sender: "support",
       time: now(),
     },
   ]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const [awaitingTransfer, setAwaitingTransfer] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const replyIndex = useRef(0);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -54,14 +97,45 @@ export function SupportChat() {
     setTyping(true);
 
     setTimeout(() => {
-      const reply = autoReplies[replyIndex.current % autoReplies.length];
-      replyIndex.current++;
+      let reply = "";
+      
+      if (awaitingTransfer) {
+        const normalized = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (normalized.includes("sim") || normalized.includes("quero") || normalized.includes("pode") || normalized.includes("por favor") || normalized.includes("falar")) {
+          reply = "Perfeito! Estou te redirecionando para a nossa central de Suporte Humano, onde você pode abrir um ticket oficial com a equipe...";
+          setTimeout(() => {
+            setOpen(false);
+            navigate('/cliente/suporte');
+          }, 2500);
+        } else if (normalized.includes("nao") || normalized.includes("não") || normalized.includes("deixa")) {
+          reply = "Tudo bem! Posso te ajudar com mais alguma dúvida então?";
+        } else {
+          reply = "Desculpe, não entendi. Responda com 'Sim' para falar com um humano ou 'Não' para continuar aqui.";
+          // keep awaitingTransfer true
+          setMessages((prev) => [
+            ...prev,
+            { id: Date.now() + 1, text: reply, sender: "support", time: now() },
+          ]);
+          setTyping(false);
+          return;
+        }
+        setAwaitingTransfer(false);
+      } else {
+        const botReply = getBotReply(text);
+        if (botReply) {
+          reply = botReply;
+        } else {
+          reply = "Desculpe, ainda estou aprendendo e não tenho certeza sobre isso. Gostaria de falar com nossa equipe de suporte humano para resolver isso?";
+          setAwaitingTransfer(true);
+        }
+      }
+
       setMessages((prev) => [
         ...prev,
         { id: Date.now() + 1, text: reply, sender: "support", time: now() },
       ]);
       setTyping(false);
-    }, 1200 + Math.random() * 800);
+    }, 1000 + Math.random() * 500);
   };
 
   return createPortal(
@@ -86,7 +160,7 @@ export function SupportChat() {
                 <Bot className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-foreground">Suporte Kortex</p>
+                <p className="text-sm font-semibold text-foreground">Sofia</p>
                 <p className="text-[10px] text-[hsl(var(--success))]">● Online</p>
               </div>
             </div>

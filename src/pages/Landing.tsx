@@ -2,7 +2,9 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import WhyKortexSection from "@/components/WhyKortexSection";
 import SystemSection from "@/components/SystemSection";
-import PricingSection from "@/components/PricingSection";
+import TechStackSection from "@/components/TechStackSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import ConsultancySection from "@/components/ConsultancySection";
 import AuthoritySection from "@/components/AuthoritySection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
@@ -14,7 +16,9 @@ const Index = () => {
       <HeroSection />
       <WhyKortexSection />
       <SystemSection />
-      <PricingSection />
+      <TechStackSection />
+      <TestimonialsSection />
+      <ConsultancySection />
       <AuthoritySection />
       <CTASection />
       <Footer />
@@ -23,4 +27,3 @@ const Index = () => {
 };
 
 export default Index;
-

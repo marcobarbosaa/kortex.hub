@@ -85,7 +85,7 @@ const Register = () => {
       {/* ── LEFT PANEL: Welcome ── */}
       <div className="register-left">
         <div className="register-left-content">
-          <div className="register-logo">KORTEX</div>
+          <div className="register-logo">GABS</div>
 
           <h1 className="register-welcome-title">
             Bem-vindo ao <span>futuro</span> do seu negócio.

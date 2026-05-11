@@ -26,7 +26,6 @@ import Notifications from "./pages/admin/Notifications";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import OnboardingFlow from "./pages/onboarding/OnboardingFlow";
-import SetupInicial from "./pages/onboarding/SetupInicial";
 
 // Páginas Públicas do Rodapé
 import Cases from "./pages/public/Cases";
@@ -62,9 +61,8 @@ const App = () => (
             <Route path="/termos" element={<Termos />} />
             <Route path="/cookies" element={<Cookies />} />
 
-            {/* ── Rotas de Onboarding (Etapas 1-3) ── */}
+            {/* ── Rotas de Onboarding (Etapa única) ── */}
             <Route path="/onboarding" element={<ProtectedRoute skipOnboardingGuard><OnboardingFlow /></ProtectedRoute>} />
-            <Route path="/onboarding/setup" element={<ProtectedRoute skipOnboardingGuard><SetupInicial /></ProtectedRoute>} />
 
             {/* ── Rotas de Admin (Requer cargo de admin) ── */}
             <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />

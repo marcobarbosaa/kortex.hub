@@ -2,9 +2,9 @@ import PublicPageLayout from "@/components/PublicPageLayout";
 
 const Sobre = () => {
   return (
-    <PublicPageLayout title="Sobre a Kortex" description="Estratégia, design e tecnologia combinados em um único sistema de crescimento.">
+    <PublicPageLayout title="Sobre a GABS" description="Estratégia, design e tecnologia combinados em um único sistema de crescimento.">
       <p>
-        A Kortex nasceu com a missão de transformar a forma como empresas escalam no ambiente digital.
+        A GABS nasceu com a missão de transformar a forma como empresas escalam no ambiente digital.
         Não entregamos apenas serviços; construímos infraestruturas completas de crescimento através de
         Landing Pages de alta performance, Web Apps e Automações inteligentes.
       </p>

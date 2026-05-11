@@ -57,7 +57,7 @@ export function AppSidebar({ collapsed = false }: AppSidebarProps) {
           <span className="text-primary-foreground font-bold text-sm">K</span>
         </div>
         {!collapsed && (
-          <span className="text-foreground font-semibold text-lg tracking-tight">Kortex</span>
+          <span className="text-foreground font-semibold text-lg tracking-tight">GABS</span>
         )}
       </div>
 

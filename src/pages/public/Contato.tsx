@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 const Contato = () => {
   return (
-    <PublicPageLayout title="Fale com a Kortex" description="Estamos prontos para entender seus desafios e projetar a solução ideal.">
+    <PublicPageLayout title="Fale com a GABS" description="Estamos prontos para entender seus desafios e projetar a solução ideal.">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
         <div>
           <h3 className="text-2xl font-bold text-foreground mb-4">Como podemos ajudar?</h3>
@@ -14,7 +14,7 @@ const Contato = () => {
           <div className="space-y-4">
             <div>
               <p className="text-sm font-semibold text-foreground">Email Institucional</p>
-              <p className="text-muted-foreground">contato@kortex.dev</p>
+              <p className="text-muted-foreground">contato@usegabs.com</p>
             </div>
             <div>
               <p className="text-sm font-semibold text-foreground">Sede Operacional</p>

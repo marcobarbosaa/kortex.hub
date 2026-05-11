@@ -2,7 +2,7 @@ import PublicPageLayout from "@/components/PublicPageLayout";
 
 const Blog = () => {
   return (
-    <PublicPageLayout title="Blog Kortex" description="Insights, estratégias e novidades sobre tecnologia e crescimento digital.">
+    <PublicPageLayout title="Blog GABS" description="Insights, estratégias e novidades sobre tecnologia e crescimento digital.">
       <div className="space-y-8 mt-8">
         <article className="border-b border-border pb-8">
           <span className="text-kortex-orange text-sm font-semibold">Tecnologia</span>

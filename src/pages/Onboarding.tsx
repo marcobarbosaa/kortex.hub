@@ -68,7 +68,7 @@ const Onboarding = () => {
 
       if (error) throw error;
 
-      toast.success('Perfil configurado com sucesso! Bem-vindo ao Kortex.');
+      toast.success('Perfil configurado com sucesso! Bem-vindo ao GABS.');
       navigate('/cliente');
     } catch (error: any) {
       toast.error('Erro ao salvar perfil: ' + error.message);
@@ -85,14 +85,14 @@ const Onboarding = () => {
       <div className="onboarding-container">
         <div className="onboarding-card">
           <header className="onboarding-header">
-            <span className="onboarding-logo">KORTEX</span>
+            <span className="onboarding-logo">GABS</span>
             <h1 className="onboarding-title">
               {step === 1 ? 'Sua Empresa' : 'Seus Objetivos'}
             </h1>
             <p className="onboarding-subtitle">
               {step === 1 
                 ? 'Conte-nos um pouco sobre o seu negócio para personalizarmos sua experiência.' 
-                : 'O que você deseja alcançar com o sistema Kortex?'}
+                : 'O que você deseja alcançar com o sistema GABS?'}
             </p>
           </header>
 

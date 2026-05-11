@@ -59,7 +59,7 @@ export function ClientLayout({ children, title, description }: ClientLayoutProps
               <span className="text-primary-foreground font-bold text-xs">K</span>
             </div>
             <span className="text-foreground font-semibold text-sm hidden sm:inline">
-              Kortex — Área do Cliente
+              GABS — Área do Cliente
             </span>
           </div>
         </div>
