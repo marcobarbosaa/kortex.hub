@@ -89,15 +89,15 @@ const Overview = () => {
       {/* Retention Banner (Etapa 9) */}
       <RetentionBanner />
 
-      {/* Personalized insight based on onboarding goal (Etapa 4) */}
-      {onboardingData.mainGoal && (
+      {/* Personalized insight based on onboarding need */}
+      {onboardingData.mainNeed && (
         <div className="glass-card rounded-xl p-4 glow-border mb-4 border-l-4 border-l-primary">
           <p className="text-xs text-muted-foreground">
-            <span className="text-foreground font-semibold">🎯 Foco:</span>{' '}
-            {onboardingData.mainGoal === 'crescer' && 'Crescer faturamento — acompanhe suas métricas de receita.'}
-            {onboardingData.mainGoal === 'organizar' && 'Organizar finanças — mantenha seu fluxo de caixa em dia.'}
-            {onboardingData.mainGoal === 'prejuizo' && 'Evitar prejuízo — fique atento aos alertas de gastos.'}
-            {onboardingData.mainGoal === 'automatizar' && 'Automatizar processos — descubra as automações disponíveis.'}
+            <span className="text-foreground font-semibold">🎯 Foco Atual:</span>{' '}
+            {onboardingData.mainNeed === 'webapp' && 'Desenvolvimento de Site/App — acompanhe as entregas e o roadmap do seu sistema.'}
+            {onboardingData.mainNeed === 'automation' && 'Automação de Processos — verifique o status das suas integrações e CRM.'}
+            {onboardingData.mainNeed === 'funnel' && 'Funil de Vendas — monitore a taxa de conversão e performance das suas landing pages.'}
+            {onboardingData.mainNeed === 'analytics' && 'Dados e Métricas — analise o ROI e os dashboards de crescimento em tempo real.'}
           </p>
         </div>
       )}

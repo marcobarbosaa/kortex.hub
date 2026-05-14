@@ -18,7 +18,6 @@ const Register = () => {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const fullname = formData.get('fullname') as string;
-    const business = formData.get('business') as string;
 
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -27,7 +26,6 @@ const Register = () => {
         options: {
           data: {
             full_name: fullname,
-            empresa: business, // Salvando a empresa nos metadados do usuário
           },
         },
       });
@@ -127,11 +125,6 @@ const Register = () => {
           <div className="register-form-group">
             <label htmlFor="email">E-mail</label>
             <input type="email" id="email" name="email" placeholder="seunome@empresa.com" required />
-          </div>
-
-          <div className="register-form-group">
-            <label htmlFor="business">Empresa</label>
-            <input type="text" id="business" name="business" placeholder="Nome da sua empresa" required />
           </div>
 
           <div className="register-form-group">

@@ -16,9 +16,11 @@ export function useOnboardingGuard() {
   const status = getStatus();
 
   const onboardingData = {
-    companyType: metadata.company_type || null,
-    mainPain: metadata.main_pain || null,
-    mainGoal: metadata.main_goal || null,
+    empresa: metadata.empresa || null,
+    mainNeed: metadata.main_need || null,
+    instagram: metadata.instagram || null,
+    github: metadata.github || null,
+    linkedin: metadata.linkedin || null,
     setupBalance: metadata.setup_balance || null,
     setupFirstEntry: metadata.setup_first_entry || false,
     servicesUnlocked: metadata.services_unlocked || 2,

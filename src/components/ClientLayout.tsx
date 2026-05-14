@@ -23,9 +23,7 @@ const NAV = [
   { label: "Visão Geral", icon: LayoutDashboard, url: "/cliente" },
   { label: "Projetos", icon: Briefcase, url: "/cliente/projetos" },
   { label: "Financeiro", icon: CreditCard, url: "/cliente/financeiro" },
-  { label: "Serviços", icon: Layers, url: "/cliente/servicos" },
   { label: "Suporte", icon: MessageSquare, url: "/cliente/suporte" },
-  { label: "Upgrade", icon: Crown, url: "/cliente/upgrade" },
 ];
 
 export function ClientLayout({ children, title, description }: ClientLayoutProps) {
@@ -138,10 +136,10 @@ export function ClientLayout({ children, title, description }: ClientLayoutProps
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs font-semibold text-foreground truncate">
-                    {profile?.full_name || 'Cliente'}
+                    {user?.user_metadata?.empresa || profile?.full_name || 'Minha Empresa'}
                   </p>
                   <p className="text-[10px] text-muted-foreground truncate">
-                    {user?.email || 'email@exemplo.com'}
+                    {profile?.full_name || user?.email || 'email@exemplo.com'}
                   </p>
                 </div>
               </div>

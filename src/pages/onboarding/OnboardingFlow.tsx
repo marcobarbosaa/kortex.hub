@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Building2, Users, Rocket, User,
   Wallet, CalendarCheck, TrendingDown, BarChart3, FileText,
-  TrendingUp, FolderKanban, ShieldAlert, Cpu,
+  TrendingUp, FolderKanban, ShieldAlert, Cpu, Layers,
   ChevronRight, ChevronLeft, Check
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -12,84 +12,45 @@ import CyberneticGridShader from '@/components/CyberneticGridShader';
 import './OnboardingFlow.css';
 
 // ── STEP DATA ──
-const COMPANY_TYPES = [
-  { id: 'mei', label: 'MEI', icon: User },
-  { id: 'pequena', label: 'Pequena Empresa', icon: Building2 },
-  { id: 'startup', label: 'Startup', icon: Rocket },
-  { id: 'freelancer', label: 'Freelancer', icon: Users },
-];
-
-const PAIN_POINTS = [
-  { id: 'financeiro', label: 'Controle Financeiro', icon: Wallet },
-  { id: 'planejamento', label: 'Planejamento', icon: CalendarCheck },
-  { id: 'custos', label: 'Redução de Custos', icon: TrendingDown },
-  { id: 'fluxo', label: 'Fluxo de Caixa', icon: BarChart3 },
-  { id: 'relatorios', label: 'Relatórios', icon: FileText },
-];
-
-const GOALS = [
-  { id: 'crescer', label: 'Crescer Faturamento', icon: TrendingUp },
-  { id: 'organizar', label: 'Organizar Finanças', icon: FolderKanban },
-  { id: 'prejuizo', label: 'Evitar Prejuízo', icon: ShieldAlert },
-  { id: 'automatizar', label: 'Automatizar Processos', icon: Cpu },
-];
-
-const STEPS = [
-  { key: 'company_type', title: 'Boas-vindas à GABS! 🚀', subtitle: 'Para começarmos nossa parceria, conta pra gente: como você descreve o seu negócio hoje?', options: COMPANY_TYPES },
-  { key: 'main_pain', title: 'Onde podemos ajudar?', subtitle: 'Sabemos que crescer dá trabalho. Qual é o maior gargalo que está impedindo você de escalar?', options: PAIN_POINTS },
-  { key: 'main_goal', title: 'Seu Objetivo Principal', subtitle: 'Onde você quer chegar nos próximos meses? Nosso time vai focar exatamente nisso.', options: GOALS },
+const NEEDS = [
+  { id: 'webapp', label: 'Site ou Web App', icon: Cpu, desc: 'Sistemas e plataformas robustas' },
+  { id: 'automation', label: 'Automação', icon: Rocket, desc: 'Processos e CRM no automático' },
+  { id: 'funnel', label: 'Funil de Vendas', icon: BarChart3, desc: 'Páginas de alta conversão' },
+  { id: 'analytics', label: 'Dados e Métricas', icon: TrendingUp, desc: 'Dashboards e análise de ROI' },
 ];
 
 const OnboardingFlow = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [selections, setSelections] = useState<Record<string, string>>({});
-
-  // Dynamic Content based on selection
-  const getContextualContent = () => {
-    const type = selections.company_type;
-    switch (type) {
-      case 'mei':
-        return {
-          pain: { title: 'Qual é o maior desafio do seu "corre"?', subtitle: 'Ser MEI é ser herói. Onde a GABS pode tirar um peso das suas costas hoje?' },
-          goal: { title: 'Onde você quer chegar?', subtitle: 'Vamos organizar a casa para você focar no que realmente importa: crescer.' },
-          verify: { title: 'Quase lá!', subtitle: 'Para garantir a segurança, valide seu negócio com seu CNPJ ou Instagram profissional.' }
-        };
-      case 'freelancer':
-        return {
-          pain: { title: 'O que está travando seus jobs?', subtitle: 'Gestão de tempo ou de grana? Conta pra gente qual é o seu maior gargalo.' },
-          goal: { title: 'Sua meta como freela', subtitle: 'Quer mais clientes ou mais tempo livre? Vamos traçar esse caminho.' },
-          verify: { title: 'Mostre seu trabalho', subtitle: 'Conecte suas redes para validarmos seu perfil de especialista.' }
-        };
-      case 'startup':
-        return {
-          pain: { title: 'Qual é o seu blocker para o scaling?', subtitle: 'Product-market fit ou eficiência operacional? Onde atacamos primeiro?' },
-          goal: { title: 'Seu North Star Metric', subtitle: 'Qual é o grande objetivo da rodada? Vamos impulsionar sua tração.' },
-          verify: { title: 'Verificação de Tração', subtitle: 'Valide sua startup com CNPJ/Instagram e, se tiver, seu repositório principal.' }
-        };
-      case 'pequena':
-        return {
-          pain: { title: 'Qual desafio tira o sono da sua empresa?', subtitle: 'Gestão, equipe ou faturamento? Vamos profissionalizar sua operação.' },
-          goal: { title: 'Objetivo Estratégico', subtitle: 'Qual é a prioridade para o próximo semestre? Estamos aqui para entregar resultados.' },
-          verify: { title: 'Segurança Institucional', subtitle: 'Confirme os dados da sua empresa para liberarmos seu acesso completo.' }
-        };
-      default:
-        return {
-          pain: { title: 'Onde podemos ajudar?', subtitle: 'Sabemos que crescer dá trabalho. Qual é o maior gargalo que está impedindo você de escalar?' },
-          goal: { title: 'Seu Objetivo Principal', subtitle: 'Onde você quer chegar nos próximos meses? Nosso time vai focar exatamente nisso.' },
-          verify: { title: 'Validação', subtitle: 'Só mais um passo para garantirmos a melhor experiência.' }
-        };
-    }
-  };
-
-  const context = getContextualContent();
+  const [selections, setSelections] = useState<Record<string, string>>({
+    business_name: '',
+    instagram: '',
+    linkedin: '',
+    github: '',
+    need: ''
+  });
 
   const STEPS = [
-    { key: 'company_type', title: 'Boas-vindas à GABS! 🚀', subtitle: 'Para começarmos nossa parceria, conta pra gente: como você descreve o seu negócio hoje?', type: 'options', options: COMPANY_TYPES },
-    { key: 'main_pain', title: context.pain.title, subtitle: context.pain.subtitle, type: 'options', options: PAIN_POINTS },
-    { key: 'main_goal', title: context.goal.title, subtitle: context.goal.subtitle, type: 'options', options: GOALS },
-    { key: 'verification', title: context.verify.title, subtitle: context.verify.subtitle, type: 'fields' },
+    { 
+      key: 'need', 
+      title: 'O que você precisa hoje? 🚀', 
+      subtitle: 'Selecione o foco principal do seu projeto para começarmos.', 
+      type: 'options', 
+      options: NEEDS 
+    },
+    { 
+      key: 'identity', 
+      title: 'Identidade do seu negócio', 
+      subtitle: 'Como devemos chamar sua empresa ou projeto no dashboard?', 
+      type: 'fields' 
+    },
+    { 
+      key: 'social', 
+      title: 'Presença Digital', 
+      subtitle: 'Opcional: Compartilhar suas redes nos ajuda a entender seu nicho e personalizar sua experiência.', 
+      type: 'fields' 
+    },
   ];
 
   const currentStep = STEPS[step];
@@ -103,24 +64,14 @@ const OnboardingFlow = () => {
   };
 
   const handleNext = () => {
-    if (currentStep.type === 'options' && !selections[currentStep.key]) {
+    if (currentStep.key === 'need' && !selections.need) {
       toast.error('Selecione uma opção para continuar.');
       return;
     }
     
-    if (currentStep.key === 'verification') {
-      const type = selections.company_type;
-      if (type === 'freelancer') {
-        if (!selections.instagram && !selections.github && !selections.linkedin) {
-          toast.error('Informe pelo menos uma rede social para verificação.');
-          return;
-        }
-      } else {
-        if (!selections.cnpj && !selections.instagram) {
-          toast.error('Informe o CNPJ ou Instagram para verificação.');
-          return;
-        }
-      }
+    if (currentStep.key === 'identity' && !selections.business_name) {
+      toast.error('Informe o nome da sua empresa.');
+      return;
     }
 
     if (step < STEPS.length - 1) {
@@ -140,13 +91,11 @@ const OnboardingFlow = () => {
       const { error } = await supabase.auth.updateUser({
         data: {
           onboarding_completed: true,
-          company_type: selections.company_type,
-          main_pain: selections.main_pain,
-          main_goal: selections.main_goal,
-          verification_cnpj: selections.cnpj || null,
-          verification_instagram: selections.instagram || null,
-          verification_github: selections.github || null,
-          verification_linkedin: selections.linkedin || null,
+          empresa: selections.business_name,
+          main_need: selections.need,
+          instagram: selections.instagram || null,
+          github: selections.github || null,
+          linkedin: selections.linkedin || null,
         }
       });
       if (error) throw error;
@@ -199,7 +148,10 @@ const OnboardingFlow = () => {
                     <div className="ob-option-icon">
                       <opt.icon size={18} />
                     </div>
-                    <span className="ob-option-label">{opt.label}</span>
+                    <div className="flex flex-col text-left flex-1">
+                      <span className="ob-option-label">{opt.label}</span>
+                      <span className="text-[10px] text-muted-foreground">{opt.desc}</span>
+                    </div>
                     <div className="ob-check">
                       <Check size={10} color="#fff" />
                     </div>
@@ -209,61 +161,61 @@ const OnboardingFlow = () => {
             </div>
           )}
 
-          {/* Verification Fields Step */}
-          {currentStep.key === 'verification' && (
+          {/* Identity Step */}
+          {currentStep.key === 'identity' && (
             <div className="ob-slide-enter space-y-4 py-4">
-              {(selections.company_type !== 'freelancer') && (
-                <div className="form-group">
-                  <label className="text-xs font-medium text-muted-foreground mb-1 block">CNPJ (Opcional)</label>
-                  <input
-                    type="text"
-                    placeholder="00.000.000/0000-00"
-                    className="w-full bg-secondary/30 border border-border/50 rounded-lg px-4 py-3 text-sm focus:border-primary outline-none transition-colors"
-                    value={selections.cnpj || ''}
-                    onChange={(e) => handleInputChange('cnpj', e.target.value)}
-                  />
-                </div>
-              )}
-              
               <div className="form-group">
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Instagram Profissional</label>
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">Nome da Empresa ou Projeto</label>
+                <input
+                  type="text"
+                  placeholder="Ex: Minha Startup"
+                  className="w-full bg-secondary/30 border border-border/50 rounded-lg px-4 py-3 text-sm focus:border-primary outline-none transition-colors"
+                  value={selections.business_name}
+                  onChange={(e) => handleInputChange('business_name', e.target.value)}
+                  autoFocus
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Social Step */}
+          {currentStep.key === 'social' && (
+            <div className="ob-slide-enter space-y-4 py-4">
+              <div className="form-group">
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">Instagram (Opcional)</label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">@</span>
                   <input
                     type="text"
                     placeholder="seu.perfil"
                     className="w-full bg-secondary/30 border border-border/50 rounded-lg pl-8 pr-4 py-3 text-sm focus:border-primary outline-none transition-colors"
-                    value={selections.instagram || ''}
+                    value={selections.instagram}
                     onChange={(e) => handleInputChange('instagram', e.target.value)}
                   />
                 </div>
               </div>
 
-              {(selections.company_type === 'freelancer' || selections.company_type === 'startup') && (
-                <div className="form-group">
-                  <label className="text-xs font-medium text-muted-foreground mb-1 block">GitHub (Opcional)</label>
-                  <input
-                    type="text"
-                    placeholder="github.com/usuario"
-                    className="w-full bg-secondary/30 border border-border/50 rounded-lg px-4 py-3 text-sm focus:border-primary outline-none transition-colors"
-                    value={selections.github || ''}
-                    onChange={(e) => handleInputChange('github', e.target.value)}
-                  />
-                </div>
-              )}
+              <div className="form-group">
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">LinkedIn (Opcional)</label>
+                <input
+                  type="text"
+                  placeholder="linkedin.com/in/usuario"
+                  className="w-full bg-secondary/30 border border-border/50 rounded-lg px-4 py-3 text-sm focus:border-primary outline-none transition-colors"
+                  value={selections.linkedin}
+                  onChange={(e) => handleInputChange('linkedin', e.target.value)}
+                />
+              </div>
 
-              {selections.company_type === 'freelancer' && (
-                <div className="form-group">
-                  <label className="text-xs font-medium text-muted-foreground mb-1 block">LinkedIn (Opcional)</label>
-                  <input
-                    type="text"
-                    placeholder="linkedin.com/in/usuario"
-                    className="w-full bg-secondary/30 border border-border/50 rounded-lg px-4 py-3 text-sm focus:border-primary outline-none transition-colors"
-                    value={selections.linkedin || ''}
-                    onChange={(e) => handleInputChange('linkedin', e.target.value)}
-                  />
-                </div>
-              )}
+              <div className="form-group">
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">GitHub (Opcional)</label>
+                <input
+                  type="text"
+                  placeholder="github.com/usuario"
+                  className="w-full bg-secondary/30 border border-border/50 rounded-lg px-4 py-3 text-sm focus:border-primary outline-none transition-colors"
+                  value={selections.github}
+                  onChange={(e) => handleInputChange('github', e.target.value)}
+                />
+              </div>
             </div>
           )}
 
@@ -284,7 +236,7 @@ const OnboardingFlow = () => {
                 ? 'Salvando...'
                 : step < STEPS.length - 1
                   ? 'Próximo'
-                  : 'Acessar meu Dashboard'}
+                  : 'Finalizar Configuração'}
               {!isLoading && <ChevronRight size={15} />}
             </button>
           </footer>
