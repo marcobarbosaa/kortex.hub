@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
-import { ChevronRight, ChevronLeft, Sparkles, RotateCcw } from "lucide-react";
+import { ChevronRight, ChevronLeft, Sparkles, RotateCcw, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const QUESTIONS = [
   {
     id: "segment",
     question: "Qual é o segmento do seu negócio?",
+    subtitle: "Selecione um ou mais segmentos que melhor descrevem seu negócio.",
+    multiple: true,
     options: [
       { id: "ecommerce", label: "E-commerce / Loja Online" },
       { id: "saas", label: "SaaS / Tecnologia" },
@@ -17,16 +19,10 @@ const QUESTIONS = [
     ],
   },
   {
-    id: "challenge",
-    question: "Qual é o maior desafio da sua empresa hoje?",
-    options: [
-      { id: "conversao", label: "Baixa conversão de leads" },
-      { id: "presenca", label: "Falta de presença digital" },
-      { id: "automacao", label: "Processos manuais e lentos" },
-      { id: "escala", label: "Dificuldade em escalar" },
-      { id: "branding", label: "Marca fraca ou desatualizada" },
-      { id: "dados", label: "Falta de dados e métricas" },
-    ],
+    id: "description",
+    question: "O que você deseja para sua empresa?",
+    subtitle: "Fale abertamente sobre seus objetivos e o que você busca.",
+    type: "textarea",
   },
   {
     id: "budget",
@@ -50,73 +46,45 @@ const QUESTIONS = [
   },
 ];
 
-type Answers = Record<string, string>;
-
-function generateRecommendation(answers: Answers): { title: string; description: string; services: string[] } {
-  const { challenge, budget, urgency } = answers;
-
-  let title = "";
-  let description = "";
-  const services: string[] = [];
-
-  // Challenge-based recommendations
-  if (challenge === "conversao") {
-    title = "Funil de Conversão Inteligente";
-    description = "Seu maior gargalo é converter visitantes em clientes. Recomendamos um sistema de landing pages otimizadas com automação de follow-up para transformar leads frios em compradores.";
-    services.push("Landing Pages de Alta Conversão", "Automação de E-mail/WhatsApp", "Tracking e Analytics Avançado");
-  } else if (challenge === "presenca") {
-    title = "Presença Digital Completa";
-    description = "Você precisa existir no digital com força. Um site profissional + estratégia de conteúdo + automação básica vão colocar sua empresa no mapa rapidamente.";
-    services.push("Site Institucional Premium", "Identidade Visual Digital", "SEO e Posicionamento");
-  } else if (challenge === "automacao") {
-    title = "Automação de Processos";
-    description = "Processos manuais estão consumindo tempo e dinheiro. Vamos mapear seus fluxos e automatizar tudo que for possível com integrações inteligentes.";
-    services.push("Mapeamento de Processos", "Integrações n8n/Zapier", "CRM Automatizado");
-  } else if (challenge === "escala") {
-    title = "Sistema de Escala Digital";
-    description = "Você já tem tração, mas precisa de infraestrutura para crescer sem gargalos. Um Web App personalizado com automações de CRM vai destravar seu crescimento.";
-    services.push("Web App Personalizado", "Automação de CRM", "Dashboard de Métricas");
-  } else if (challenge === "branding") {
-    title = "Redesign de Marca Digital";
-    description = "Sua marca precisa de uma nova identidade que transmita profissionalismo e confiança. Vamos redesenhar toda a experiência visual do seu negócio.";
-    services.push("Nova Identidade Visual", "Redesign do Site", "Kit de Redes Sociais");
-  } else {
-    title = "Diagnóstico Personalizado";
-    description = "Com base nas suas respostas, identificamos que você precisa de uma análise mais profunda. Nosso time vai montar um plano personalizado para o seu caso.";
-    services.push("Consultoria Estratégica", "Diagnóstico Digital", "Plano de Ação Personalizado");
-  }
-
-  // Budget modifier
-  if (budget === "enterprise") {
-    services.push("Gerente de Projeto Dedicado");
-  }
-
-  // Urgency modifier
-  if (urgency === "urgente") {
-    description += " Vamos priorizar seu projeto para entregarmos resultados o mais rápido possível.";
-  }
-
-  return { title, description, services };
-}
+type Answers = Record<string, string | string[]>;
 
 const ConsultancySection = () => {
   const headerRef = useScrollReveal<HTMLDivElement>();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [showResult, setShowResult] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [textAnswer, setTextAnswer] = useState("");
+  const [contact, setContact] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const question = QUESTIONS[currentQuestion];
 
   const handleSelect = (optionId: string) => {
-    setSelectedOption(optionId);
+    if (question.multiple) {
+      setSelectedOptions(prev => 
+        prev.includes(optionId) 
+          ? prev.filter(id => id !== optionId)
+          : [...prev, optionId]
+      );
+    } else {
+      setSelectedOptions([optionId]);
+    }
   };
 
   const handleNext = () => {
-    if (!selectedOption) return;
-    const newAnswers = { ...answers, [question.id]: selectedOption };
-    setAnswers(newAnswers);
-    setSelectedOption("");
+    if (question.type === "textarea") {
+      if (!textAnswer.trim()) return;
+      const newAnswers = { ...answers, [question.id]: textAnswer };
+      setAnswers(newAnswers);
+      setTextAnswer("");
+    } else {
+      if (selectedOptions.length === 0) return;
+      const newAnswers = { ...answers, [question.id]: question.multiple ? selectedOptions : selectedOptions[0] };
+      setAnswers(newAnswers);
+      setSelectedOptions([]);
+    }
 
     if (currentQuestion < QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -127,8 +95,15 @@ const ConsultancySection = () => {
 
   const handlePrev = () => {
     if (currentQuestion > 0) {
+      const prevQuestion = QUESTIONS[currentQuestion - 1];
       setCurrentQuestion(currentQuestion - 1);
-      setSelectedOption(answers[QUESTIONS[currentQuestion - 1].id] || "");
+      
+      const prevAnswer = answers[prevQuestion.id];
+      if (prevQuestion.type === "textarea") {
+        setTextAnswer(prevAnswer as string || "");
+      } else {
+        setSelectedOptions(Array.isArray(prevAnswer) ? prevAnswer : prevAnswer ? [prevAnswer] : []);
+      }
     }
   };
 
@@ -136,10 +111,30 @@ const ConsultancySection = () => {
     setCurrentQuestion(0);
     setAnswers({});
     setShowResult(false);
-    setSelectedOption("");
+    setSelectedOptions([]);
+    setTextAnswer("");
+    setContact("");
+    setIsSubmitted(false);
   };
 
-  const recommendation = showResult ? generateRecommendation(answers) : null;
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contact.trim()) return;
+    
+    setIsSubmitting(true);
+    // Simulating API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // SAVE TO LOCAL STORAGE FOR REGISTRATION/ONBOARDING
+    localStorage.setItem('kortex_pre_consultancy', JSON.stringify({
+      ...answers,
+      contact
+    }));
+
+    console.log("Lead captured:", { ...answers, contact });
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+  };
 
   return (
     <section id="consultancy" className="section-padding relative overflow-hidden">
@@ -161,7 +156,7 @@ const ConsultancySection = () => {
           </h2>
 
           <p className="text-muted-foreground text-lg">
-            Responda 4 perguntas rápidas e receba uma recomendação personalizada — totalmente grátis.
+            Responda algumas perguntas rápidas e entraremos em contato com a melhor solução para você.
           </p>
         </div>
 
@@ -188,25 +183,50 @@ const ConsultancySection = () => {
                 Pergunta {currentQuestion + 1} de {QUESTIONS.length}
               </p>
 
-              <h3 className="text-xl font-bold text-foreground mb-6 font-body">
+              <h3 className="text-xl font-bold text-foreground mb-2 font-body">
                 {question.question}
               </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
-                {question.options.map((opt) => (
-                  <button
-                    key={opt.id}
-                    onClick={() => handleSelect(opt.id)}
-                    className={`text-left px-4 py-3.5 rounded-xl border text-sm font-medium transition-all duration-200 ${
-                      selectedOption === opt.id
-                        ? "bg-kortex-orange/15 border-kortex-orange/40 text-foreground shadow-[0_0_15px_hsl(var(--kortex-orange)/0.1)]"
-                        : "bg-foreground/[0.02] border-foreground/[0.08] text-muted-foreground hover:border-foreground/20 hover:text-foreground"
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
+              {question.subtitle && (
+                <p className="text-sm text-muted-foreground mb-6">
+                  {question.subtitle}
+                </p>
+              )}
+
+              {question.type === "textarea" ? (
+                <div className="mb-8">
+                  <textarea
+                    value={textAnswer}
+                    onChange={(e) => setTextAnswer(e.target.value)}
+                    placeholder={question.placeholder || "Digite aqui..."}
+                    className="w-full h-32 bg-foreground/[0.02] border border-foreground/[0.08] rounded-xl p-4 text-sm text-foreground focus:border-kortex-orange/50 outline-none transition-all resize-none"
+                    autoFocus
+                  />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                  {question.options?.map((opt) => (
+                    <button
+                      key={opt.id}
+                      onClick={() => handleSelect(opt.id)}
+                      className={`text-left px-4 py-3.5 rounded-xl border text-sm font-medium transition-all duration-200 ${
+                        selectedOptions.includes(opt.id)
+                          ? "bg-kortex-orange/15 border-kortex-orange/40 text-foreground shadow-[0_0_15px_hsl(var(--kortex-orange)/0.1)]"
+                          : "bg-foreground/[0.02] border-foreground/[0.08] text-muted-foreground hover:border-foreground/20 hover:text-foreground"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        {opt.label}
+                        {question.multiple && selectedOptions.includes(opt.id) && (
+                          <div className="w-4 h-4 rounded-full bg-kortex-orange flex items-center justify-center animate-in zoom-in duration-200">
+                            <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <div className="flex items-center justify-between">
                 {currentQuestion > 0 ? (
@@ -222,55 +242,77 @@ const ConsultancySection = () => {
                 <Button
                   variant="hero"
                   onClick={handleNext}
-                  disabled={!selectedOption}
+                  disabled={question.type === "textarea" ? !textAnswer.trim() : selectedOptions.length === 0}
                   className="rounded-full px-8"
                 >
-                  {currentQuestion < QUESTIONS.length - 1 ? "Próximo" : "Ver Resultado"}
+                  {currentQuestion < QUESTIONS.length - 1 ? "Próximo" : "Finalizar"}
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               </div>
             </>
           ) : (
             <div className="text-center animate-in fade-in zoom-in-95 duration-500">
-              <div className="w-16 h-16 mx-auto rounded-2xl bg-kortex-orange/15 flex items-center justify-center mb-6">
-                <Sparkles className="w-8 h-8 text-kortex-orange" />
-              </div>
+              {!isSubmitted ? (
+                <>
+                  <div className="w-16 h-16 mx-auto rounded-2xl bg-kortex-orange/15 flex items-center justify-center mb-6">
+                    <Sparkles className="w-8 h-8 text-kortex-orange" />
+                  </div>
 
-              <h3 className="text-2xl font-bold text-foreground mb-3 font-body">
-                {recommendation?.title}
-              </h3>
+                  <h3 className="text-2xl font-bold text-foreground mb-3 font-body">
+                    Quase lá! Como podemos te contatar?
+                  </h3>
 
-              <p className="text-muted-foreground text-sm leading-relaxed mb-8 max-w-lg mx-auto">
-                {recommendation?.description}
-              </p>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-8 max-w-lg mx-auto">
+                    Deixe seu WhatsApp ou E-mail abaixo. Nosso time analisará suas respostas e entrará em contato com uma proposta personalizada.
+                  </p>
 
-              <div className="flex flex-wrap justify-center gap-2 mb-8">
-                {recommendation?.services.map((s) => (
-                  <span
-                    key={s}
-                    className="px-4 py-2 rounded-full text-xs font-semibold bg-kortex-orange/10 text-kortex-orange border border-kortex-orange/20"
+                  <form onSubmit={handleContactSubmit} className="space-y-4 max-w-md mx-auto mb-8">
+                    <input
+                      type="text"
+                      value={contact}
+                      onChange={(e) => setContact(e.target.value)}
+                      placeholder="WhatsApp ou E-mail"
+                      required
+                      className="w-full bg-foreground/[0.02] border border-foreground/[0.08] rounded-xl px-4 py-3 text-sm text-foreground focus:border-kortex-orange/50 outline-none transition-all"
+                    />
+                    <Button
+                      type="submit"
+                      variant="hero"
+                      size="lg"
+                      className="w-full rounded-full"
+                      disabled={isSubmitting || !contact.trim()}
+                    >
+                      {isSubmitting ? "Enviando..." : "Enviar Solicitação"}
+                    </Button>
+                  </form>
+
+                  <button
+                    onClick={handleReset}
+                    className="flex items-center justify-center gap-2 mx-auto text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {s}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button
-                  variant="hero"
-                  size="lg"
-                  className="rounded-full px-8"
-                  onClick={() => window.open("https://wa.me/5500000000000?text=Olá! Fiz a consultoria grátis no site e gostaria de saber mais.", "_blank")}
-                >
-                  Falar com um especialista
-                </Button>
-                <button
-                  onClick={handleReset}
-                  className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <RotateCcw className="w-4 h-4" /> Refazer
-                </button>
-              </div>
+                    <RotateCcw className="w-4 h-4" /> Recomeçar
+                  </button>
+                </>
+              ) : (
+                <div className="py-10">
+                  <div className="w-16 h-16 mx-auto rounded-full bg-green-500/10 flex items-center justify-center mb-6">
+                    <Check className="w-8 h-8 text-green-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground mb-3 font-body">
+                    Solicitação Enviada!
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-8">
+                    Obrigado pelo interesse! Nosso time entrará em contato em breve através do contato informado: <strong>{contact}</strong>.
+                  </p>
+                  <Button
+                    variant="outline"
+                    onClick={handleReset}
+                    className="rounded-full px-8"
+                  >
+                    Voltar ao início
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>

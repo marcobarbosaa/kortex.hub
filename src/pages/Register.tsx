@@ -20,12 +20,22 @@ const Register = () => {
     const fullname = formData.get('fullname') as string;
 
     try {
+      let preConsultancyData = {};
+      try {
+        const saved = localStorage.getItem('kortex_pre_consultancy');
+        if (saved) {
+          preConsultancyData = JSON.parse(saved);
+          // Optional: clear it if we only want to use it once, but let's keep it until onboarding finishes
+        }
+      } catch (e) {}
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             full_name: fullname,
+            ...preConsultancyData
           },
         },
       });

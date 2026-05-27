@@ -21,9 +21,8 @@ interface ClientLayoutProps {
 
 const NAV = [
   { label: "Visão Geral", icon: LayoutDashboard, url: "/cliente" },
-  { label: "Projetos", icon: Briefcase, url: "/cliente/projetos" },
-  { label: "Financeiro", icon: CreditCard, url: "/cliente/financeiro" },
-  { label: "Suporte", icon: MessageSquare, url: "/cliente/suporte" },
+  { label: "Cronograma", icon: Briefcase, url: "/cliente/projetos" },
+  { label: "Falar com Especialista", icon: MessageSquare, url: "/cliente/suporte" },
 ];
 
 export function ClientLayout({ children, title, description }: ClientLayoutProps) {
@@ -40,7 +39,7 @@ export function ClientLayout({ children, title, description }: ClientLayoutProps
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col animate-page-fade">
+    <div className="h-[100dvh] bg-background flex flex-col animate-page-fade">
       {/* ── Topbar ── */}
       <header className="h-14 flex items-center justify-between border-b border-border/50 px-4 shrink-0 bg-background z-30 sticky top-0">
         <div className="flex items-center gap-3">
@@ -88,13 +87,13 @@ export function ClientLayout({ children, title, description }: ClientLayoutProps
         {/* ── Sidebar ── */}
         <aside
           className={cn(
-            "h-full shrink-0 border-r border-border/50 flex flex-col transition-all duration-200 ease-linear overflow-y-auto",
+            "h-full shrink-0 border-r border-border/50 flex flex-col transition-all duration-200 ease-linear",
             "bg-[hsl(var(--sidebar-background))]",
             "absolute z-40 md:relative",
             sidebarOpen ? "w-52 translate-x-0" : "-translate-x-full md:translate-x-0 md:w-14"
           )}
         >
-          <div className="flex-1 py-4 px-2 space-y-0.5">
+          <div className="flex-1 overflow-y-auto py-4 px-2 space-y-0.5">
             {sidebarOpen && (
               <p className="px-2 mb-2 text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/50">
                 Menu

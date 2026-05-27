@@ -3,7 +3,7 @@ import { RetentionBanner } from "@/components/RetentionBanner";
 import {
   Briefcase, CheckCircle2, Clock, TrendingUp, Bell,
   ArrowUpRight, AlertTriangle,
-  BadgeCheck, Activity, Receipt,
+  BadgeCheck, Activity, Receipt, MessageSquare
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -91,99 +91,134 @@ const Overview = () => {
 
       {/* Personalized insight based on onboarding need */}
       {onboardingData.mainNeed && (
-        <div className="glass-card rounded-xl p-4 glow-border mb-4 border-l-4 border-l-primary">
-          <p className="text-xs text-muted-foreground">
-            <span className="text-foreground font-semibold">🎯 Foco Atual:</span>{' '}
-            {onboardingData.mainNeed === 'webapp' && 'Desenvolvimento de Site/App — acompanhe as entregas e o roadmap do seu sistema.'}
-            {onboardingData.mainNeed === 'automation' && 'Automação de Processos — verifique o status das suas integrações e CRM.'}
-            {onboardingData.mainNeed === 'funnel' && 'Funil de Vendas — monitore a taxa de conversão e performance das suas landing pages.'}
-            {onboardingData.mainNeed === 'analytics' && 'Dados e Métricas — analise o ROI e os dashboards de crescimento em tempo real.'}
+        <div className="glass-card rounded-xl p-5 glow-border mb-6 border-l-4 border-l-primary bg-primary/5">
+          <h2 className="text-sm font-bold text-foreground mb-1 flex items-center gap-2">
+            <BadgeCheck className="h-4 w-4 text-primary" /> Seu Foco Principal
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {onboardingData.mainNeed === 'webapp' && 'Desenvolvimento de Site/App — acompanhe as entregas e o roadmap do seu sistema direto no Cronograma.'}
+            {onboardingData.mainNeed === 'automation' && 'Automação de Processos — verifique o status das suas integrações e automações ativas.'}
+            {onboardingData.mainNeed === 'funnel' && 'Funil de Vendas — estrutura de alta conversão em desenvolvimento contínuo.'}
+            {onboardingData.mainNeed === 'analytics' && 'Dados e Métricas — estruturação de análise de ROI e dashboards.'}
           </p>
         </div>
       )}
 
-      {/* KPI cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: "Projetos Ativos", value: String(activeProjects), sub: `${completedProjects} concluído(s)`, trend: "up", icon: Briefcase, color: "text-primary", bg: "bg-primary/10" },
-          { label: "Campanhas", value: String(campaigns?.length || 0), sub: `${campaigns?.filter(c => c.status === 'active').length || 0} ativa(s)`, trend: "up", icon: TrendingUp, color: "text-success", bg: "bg-success/10" },
-          { label: "Faturas Pendentes", value: String(pendingInvoices), sub: pendingInvoices > 0 ? "Atenção" : "Tudo em dia", trend: pendingInvoices > 0 ? "warn" : "up", icon: Clock, color: pendingInvoices > 0 ? "text-warning" : "text-success", bg: pendingInvoices > 0 ? "bg-warning/10" : "bg-success/10" },
-          { label: "Tickets Abertos", value: String(openTickets), sub: openTickets > 0 ? "Em andamento" : "Nenhum", trend: openTickets > 0 ? "warn" : "up", icon: CheckCircle2, color: openTickets > 0 ? "text-warning" : "text-success", bg: openTickets > 0 ? "bg-warning/10" : "bg-success/10" },
-        ].map((c) => (
-          <div key={c.label} className="glass-card rounded-xl p-5 glow-border">
-            <div className={cn("h-9 w-9 rounded-lg flex items-center justify-center mb-3", c.bg)}>
-              <c.icon className={cn("h-4 w-4", c.color)} />
-            </div>
-            <p className="text-2xl font-bold text-foreground">{c.value}</p>
-            <p className="text-xs text-muted-foreground mt-0.5">{c.label}</p>
-            <div className={cn("flex items-center gap-1 mt-2 text-xs font-medium", c.trend === "up" ? "text-success" : "text-warning")}>
-              {c.trend === "up" ? <ArrowUpRight className="h-3 w-3" /> : <AlertTriangle className="h-3 w-3" />}
-              {c.sub}
-            </div>
-          </div>
-        ))}
-      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Main Pillar 1: Project Progress / Macro */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="glass-card rounded-xl p-6 glow-border relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10" />
+            <h2 className="text-lg font-bold text-foreground flex items-center gap-2 mb-4 relative z-10">
+              <Briefcase className="h-5 w-5 text-primary" /> Andamento do Projeto
+            </h2>
+            
+            {projects && projects.length > 0 ? (
+              <div className="space-y-4 relative z-10">
+                {projects.filter(p => p.status === 'active').length > 0 ? (
+                  projects.filter(p => p.status === 'active').slice(0, 1).map((p) => (
+                    <div key={p.id} className="p-4 rounded-xl bg-background/50 border border-border/50">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h3 className="font-semibold text-foreground">{p.name}</h3>
+                          <p className="text-xs text-muted-foreground mt-0.5 capitalize">{p.status === 'active' ? 'Em andamento' : p.status}</p>
+                        </div>
+                        <span className="px-2.5 py-1 text-[10px] font-bold tracking-wider rounded-md bg-primary/10 text-primary uppercase">
+                          Ativo
+                        </span>
+                      </div>
+                      
+                      <div className="mt-6">
+                        <div className="flex justify-between text-xs font-medium mb-2">
+                          <span className="text-muted-foreground">Progresso Estimado</span>
+                          <span className="text-primary">Em construção</span>
+                        </div>
+                        <div className="h-2 w-full bg-secondary/50 rounded-full overflow-hidden">
+                          <div className="h-full bg-primary rounded-full w-1/2 animate-pulse" />
+                        </div>
+                      </div>
 
-      {/* Recent invoices + tickets */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Faturas recentes */}
-        <div className="glass-card rounded-xl p-5 glow-border">
-          <h2 className="text-sm font-semibold text-foreground flex items-center gap-2 mb-4">
-            <Receipt className="h-4 w-4 text-primary" /> Últimas Faturas
-          </h2>
-          <div className="space-y-2">
-            {!invoices || invoices.length === 0 ? (
-              <p className="text-xs text-muted-foreground text-center py-4">Nenhuma fatura registrada.</p>
+                      <a href="/cliente/projetos" className="mt-5 w-full block text-center bg-muted/50 hover:bg-muted text-foreground text-xs font-semibold py-2.5 rounded-lg transition-colors border border-border/50">
+                        Ver Cronograma Completo
+                      </a>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">Você possui projetos, mas nenhum ativo no momento.</p>
+                )}
+              </div>
             ) : (
-              invoices.slice(0, 4).map((inv) => (
-                <div key={inv.id} className="flex items-center justify-between rounded-lg bg-muted/30 px-3 py-2.5 group hover:bg-muted/60 transition-colors">
-                  <div className="flex items-center gap-2">
-                    <div className={cn("h-7 w-7 rounded-lg flex items-center justify-center shrink-0",
-                      inv.status === 'paid' ? "bg-success/10" : "bg-warning/10"
-                    )}>
-                      <Receipt className={cn("h-3.5 w-3.5", inv.status === 'paid' ? "text-success" : "text-warning")} />
-                    </div>
-                    <div>
-                      <p className="text-xs text-foreground font-medium">
-                        R$ {Number(inv.amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                      </p>
-                      <p className="text-[10px] text-muted-foreground">{inv.status === 'paid' ? 'Paga' : 'Pendente'}</p>
-                    </div>
-                  </div>
-                </div>
-              ))
+              <div className="p-6 rounded-xl bg-background/50 border border-border/50 text-center relative z-10">
+                <Activity className="h-8 w-8 text-muted-foreground mx-auto mb-3 opacity-50" />
+                <p className="text-sm font-medium text-foreground">Configurando ambiente</p>
+                <p className="text-xs text-muted-foreground mt-1">Nossa equipe está preparando o cronograma do seu projeto.</p>
+              </div>
             )}
           </div>
         </div>
 
-        {/* Tickets recentes */}
-        <div className="glass-card rounded-xl p-5 glow-border">
-          <h2 className="text-sm font-semibold text-foreground flex items-center gap-2 mb-4">
-            <Bell className="h-4 w-4 text-primary" /> Tickets Recentes
-          </h2>
-          <div className="space-y-2">
-            {!tickets || tickets.length === 0 ? (
-              <p className="text-xs text-muted-foreground text-center py-4">Nenhum ticket de suporte.</p>
+        {/* Sidebar Pillars: Financial & Quick Links */}
+        <div className="space-y-6">
+          
+          {/* Quick Links */}
+          <div className="glass-card rounded-xl p-6 glow-border">
+            <h2 className="text-sm font-bold text-foreground flex items-center gap-2 mb-4">
+              <ArrowUpRight className="h-4 w-4 text-primary" /> Acessos Rápidos
+            </h2>
+            <div className="space-y-2">
+              <a href="/cliente/suporte" className="w-full flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors group">
+                <span className="text-sm font-medium text-foreground">Suporte Especializado</span>
+                <MessageSquare className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+              </a>
+              <a href="/cliente/projetos" className="w-full flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors group">
+                <span className="text-sm font-medium text-foreground">Arquivos e Entregas</span>
+                <Briefcase className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+              </a>
+            </div>
+          </div>
+
+          {/* Financial Minimal Widget */}
+          <div className="glass-card rounded-xl p-6 glow-border">
+            <h2 className="text-sm font-bold text-foreground flex items-center gap-2 mb-4">
+              <Receipt className="h-4 w-4 text-primary" /> Status Financeiro
+            </h2>
+            
+            {!invoices || invoices.length === 0 ? (
+              <div className="text-center py-4">
+                <CheckCircle2 className="h-6 w-6 text-success mx-auto mb-2" />
+                <p className="text-xs text-muted-foreground">Tudo certo por aqui.</p>
+              </div>
             ) : (
-              tickets.slice(0, 4).map((t) => (
-                <div key={t.id} className={cn("flex items-start gap-3 p-3 rounded-lg transition-colors",
-                  t.status !== 'resolved' ? "bg-primary/5 border border-primary/10" : "hover:bg-muted/50"
-                )}>
-                  <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                    {t.status === 'resolved' ? <Activity className="h-3.5 w-3.5 text-success" /> : <BadgeCheck className="h-3.5 w-3.5 text-primary" />}
-                  </div>
-                  <div className="min-w-0">
-                    <p className={cn("text-xs font-semibold leading-snug", t.status !== 'resolved' ? "text-foreground" : "text-foreground/70")}>
-                      {t.subject}
-                    </p>
-                    <p className="text-[10px] text-muted-foreground mt-0.5 capitalize">
-                      {t.status === 'open' ? 'Aberto' : t.status === 'in_progress' ? 'Em andamento' : 'Resolvido'}
-                    </p>
-                  </div>
-                </div>
-              ))
+              (() => {
+                const pending = invoices.find(i => i.status === 'pending');
+                if (pending) {
+                  return (
+                    <div className="p-4 rounded-xl bg-warning/5 border border-warning/20">
+                      <div className="flex items-center gap-2 mb-2 text-warning">
+                        <AlertTriangle className="h-4 w-4" />
+                        <span className="text-xs font-bold uppercase tracking-wider">Fatura Pendente</span>
+                      </div>
+                      <p className="text-xl font-bold text-foreground">
+                        R$ {Number(pending.amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                      </p>
+                      <button className="w-full mt-4 bg-primary text-primary-foreground py-2 rounded-lg text-xs font-bold hover:bg-primary/90 transition-colors">
+                        Pagar Agora
+                      </button>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="text-center py-4">
+                      <CheckCircle2 className="h-6 w-6 text-success mx-auto mb-2" />
+                      <p className="text-xs text-success font-medium">Assinatura em dia</p>
+                    </div>
+                  );
+                }
+              })()
             )}
           </div>
+
         </div>
       </div>
     </ClientLayout>
