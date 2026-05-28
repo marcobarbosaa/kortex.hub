@@ -1,39 +1,59 @@
-import { TrendingUp, Settings2, Server, ChevronRight } from "lucide-react";
-import { useScrollReveal, useStaggerReveal } from "@/hooks/use-scroll-reveal";
+import { TrendingUp, Settings2, Server, ArrowRight, Check } from "lucide-react";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
-const cards = [
+const features = [
   {
+    tag: "Crescimento",
+    title: "Crescimento que você mede, não que você adivinha.",
+    description:
+      "Nada de ações aleatórias. Cada sistema que construímos é projetado com métricas claras, funis estratégicos e dashboards em tempo real — para que você veja exatamente onde seu dinheiro está gerando resultado.",
+    image: "/why-growth.png",
     icon: TrendingUp,
-    label: "01",
-    title: "Crescimento Estruturado",
-    description: "Construímos sistemas, não conteúdo — cada ação é projetada para gerar resultados mensuráveis e escaláveis.",
-    accent: "from-orange-500/30 via-orange-500/10 to-transparent",
-    glow: "shadow-orange-500/10",
-    badge: "ROI comprovado",
+    points: [
+      "Funis de vendas com taxa de conversão monitorada",
+      "Dashboards personalizados com KPIs do seu negócio",
+      "ROI comprovado em cada entrega",
+    ],
+    accent: "from-orange-500 to-amber-500",
+    accentBorder: "border-orange-500/30",
+    accentGlow: "shadow-orange-500/20",
   },
   {
+    tag: "Automação",
+    title: "Seu negócio trabalhando enquanto você dorme.",
+    description:
+      "Integramos CRM, e-mail marketing, WhatsApp e IA em fluxos que capturam, qualificam e convertem leads no piloto automático. Menos trabalho manual, mais receita previsível.",
+    image: "/why-automation.png",
     icon: Settings2,
-    label: "02",
-    title: "Automação Inteligente",
-    description: "Fluxos automatizados com CRM e IA que transformam leads em clientes no piloto automático, 24/7.",
-    accent: "from-blue-500/30 via-blue-500/10 to-transparent",
-    glow: "shadow-blue-500/10",
-    badge: "IA integrada",
+    points: [
+      "Fluxos automatizados de captura e nutrição de leads",
+      "Integração com WhatsApp, e-mail e CRM",
+      "IA aplicada para respostas e qualificação automática",
+    ],
+    accent: "from-blue-500 to-cyan-500",
+    accentBorder: "border-blue-500/30",
+    accentGlow: "shadow-blue-500/20",
   },
   {
+    tag: "Tecnologia",
+    title: "Construído para escalar, não para quebrar.",
+    description:
+      "Usamos o mesmo stack de startups do Vale do Silício — React, Next.js, TypeScript, Supabase — para garantir que sua plataforma aguente 10 ou 10.000 usuários sem travar, sem lentidão.",
+    image: "/why-tech.png",
     icon: Server,
-    label: "03",
-    title: "Tecnologia Escalável",
-    description: "Stack de desenvolvimento moderno que garante velocidade, performance e escalabilidade sem limites.",
-    accent: "from-emerald-500/30 via-emerald-500/10 to-transparent",
-    glow: "shadow-emerald-500/10",
-    badge: "Cloud-native",
+    points: [
+      "Stack moderno: React, Next.js, TypeScript",
+      "Infraestrutura cloud-native escalável",
+      "Performance otimizada e tempo de carregamento < 2s",
+    ],
+    accent: "from-emerald-500 to-teal-500",
+    accentBorder: "border-emerald-500/30",
+    accentGlow: "shadow-emerald-500/20",
   },
 ];
 
 const WhyKortexSection = () => {
   const headerRef = useScrollReveal<HTMLDivElement>();
-  const cardsRef = useStaggerReveal<HTMLDivElement>();
 
   return (
     <section id="services" className="section-padding relative overflow-hidden">
@@ -50,50 +70,95 @@ const WhyKortexSection = () => {
             className="font-heading text-foreground tracking-[-0.02em] mt-6"
             style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)" }}
           >
-            Tudo que você precisa para{" "}
-            <span className="text-gradient-orange">escalar seu negócio</span>
+            Não vendemos promessas.{" "}
+            <span className="text-gradient-orange">Entregamos sistemas.</span>
           </h2>
 
           <p className="text-muted-foreground text-lg mt-4 max-w-2xl mx-auto">
-            Combinamos estratégia, design e tecnologia em um único sistema de crescimento.
+            Três pilares que transformam empresas comuns em máquinas de crescimento digital.
           </p>
         </div>
 
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {cards.map((card) => (
-            <div
-              key={card.title}
-              className={`why-card group`}
-            >
-              {/* Top gradient accent */}
-              <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${card.accent} rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+        {/* Alternating Feature Blocks */}
+        <div className="flex flex-col gap-24 lg:gap-32">
+          {features.map((feature, index) => {
+            const isEven = index % 2 === 0;
+            const Icon = feature.icon;
 
-              {/* Glow on hover */}
-              <div className={`absolute inset-0 rounded-2xl ${card.glow} shadow-[0_0_0px] group-hover:shadow-[0_0_40px_0px] transition-shadow duration-500 pointer-events-none`} />
-
-              <div className="relative z-10">
-                {/* Number + badge row */}
-                <div className="flex items-center justify-between mb-6">
-                  <span className="text-xs font-mono text-muted-foreground/50 tracking-widest">{card.label}</span>
-                  <span className="text-[10px] uppercase tracking-widest font-semibold px-2.5 py-1 rounded-full bg-kortex-orange/10 text-kortex-orange border border-kortex-orange/20">
-                    {card.badge}
-                  </span>
+            return (
+              <div
+                key={feature.tag}
+                className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center`}
+              >
+                {/* Image */}
+                <div
+                  className={`relative group ${isEven ? "lg:order-1" : "lg:order-2"}`}
+                >
+                  <div
+                    className={`relative rounded-3xl overflow-hidden border ${feature.accentBorder} shadow-2xl ${feature.accentGlow} hover:shadow-3xl transition-shadow duration-500`}
+                  >
+                    <img
+                      src={feature.image}
+                      alt={feature.title}
+                      className="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    />
+                    {/* Gradient overlay */}
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent`}
+                    />
+                    {/* Floating tag */}
+                    <div
+                      className={`absolute top-4 left-4 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest text-white bg-gradient-to-r ${feature.accent} shadow-lg`}
+                    >
+                      {feature.tag}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Icon */}
-                <div className="w-14 h-14 rounded-2xl bg-foreground/[0.06] border border-foreground/[0.08] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <card.icon className="w-7 h-7 text-kortex-orange" />
-                </div>
+                {/* Content */}
+                <div className={`${isEven ? "lg:order-2" : "lg:order-1"}`}>
+                  <div className="flex items-center gap-3 mb-5">
+                    <div
+                      className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${feature.accent} flex items-center justify-center shadow-lg`}
+                    >
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+                      0{index + 1} — {feature.tag}
+                    </span>
+                  </div>
 
-                <h3 className="text-xl font-bold text-foreground mb-3">{card.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-6">{card.description}</p>
+                  <h3
+                    className="font-heading text-foreground tracking-[-0.02em] mb-5"
+                    style={{ fontSize: "clamp(1.5rem, 2.5vw, 2rem)" }}
+                  >
+                    {feature.title}
+                  </h3>
 
-                <div className="flex items-center gap-1.5 text-xs text-kortex-orange font-semibold opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                  Saiba mais <ChevronRight className="w-3.5 h-3.5" />
+                  <p className="text-muted-foreground text-[15px] leading-relaxed mb-8">
+                    {feature.description}
+                  </p>
+
+                  {/* Bullet points */}
+                  <div className="space-y-3 mb-8">
+                    {feature.points.map((point) => (
+                      <div
+                        key={point}
+                        className="flex items-start gap-3 text-sm text-muted-foreground"
+                      >
+                        <div
+                          className={`w-5 h-5 rounded-full bg-gradient-to-br ${feature.accent} flex items-center justify-center flex-shrink-0 mt-0.5`}
+                        >
+                          <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                        </div>
+                        <span>{point}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

@@ -1,35 +1,47 @@
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const technologies = [
-  { name: "React", icon: "⚛️", accent: "#61DAFB" },
-  { name: "Next.js", icon: "▲", accent: "#ffffff" },
-  { name: "TypeScript", icon: "TS", accent: "#3178C6" },
-  { name: "Node.js", icon: "🟢", accent: "#68A063" },
-  { name: "Supabase", icon: "⚡", accent: "#3ECF8E" },
-  { name: "Tailwind CSS", icon: "🎨", accent: "#38BDF8" },
-  { name: "n8n", icon: "🔗", accent: "#FF6D5A" },
-  { name: "Figma", icon: "🎯", accent: "#A259FF" },
-  { name: "PostgreSQL", icon: "🐘", accent: "#336791" },
-  { name: "Vercel", icon: "▼", accent: "#ffffff" },
-  { name: "Docker", icon: "🐳", accent: "#2496ED" },
-  { name: "OpenAI", icon: "🤖", accent: "#10A37F" },
+  { name: "React", slug: "react", accent: "61DAFB", type: "simple" },
+  { name: "Next.js", slug: "nextdotjs", accent: "ffffff", type: "simple", invertInLight: true },
+  { name: "TypeScript", slug: "typescript", accent: "3178C6", type: "simple" },
+  { name: "Node.js", slug: "nodedotjs", accent: "5FA04E", type: "simple" },
+  { name: "Supabase", slug: "supabase", accent: "3ECF8E", type: "simple" },
+  { name: "n8n", slug: "n8n", accent: "FF6D5A", type: "simple" },
+  { name: "Figma", slug: "figma", accent: "F24E1E", type: "simple" },
+  { name: "Photoshop", slug: "photoshop/photoshop-plain.svg", accent: "", type: "devicon", adobeIcon: true },
+  { name: "Illustrator", slug: "illustrator/illustrator-plain.svg", accent: "", type: "devicon", adobeIcon: true },
+  { name: "Premiere", slug: "premierepro/premierepro-plain.svg", accent: "", type: "devicon", adobeIcon: true },
+  { name: "PostgreSQL", slug: "postgresql", accent: "4169E1", type: "simple" },
+  { name: "Python", slug: "python", accent: "3776AB", type: "simple" },
+  { name: "Java", slug: "java/java-original.svg", accent: "", type: "devicon" },
+  { name: "Docker", slug: "docker", accent: "2496ED", type: "simple" },
 ];
 
 // We duplicate the list so the marquee loops seamlessly
 const doubled = [...technologies, ...technologies];
 
-const TechCard = ({ tech }: { tech: typeof technologies[0] }) => (
-  <div
-    className="tech-card flex-shrink-0 flex items-center gap-3 px-5 py-3 rounded-2xl border border-foreground/[0.08] bg-foreground/[0.03] backdrop-blur-sm hover:border-kortex-orange/30 hover:bg-kortex-orange/[0.04] transition-all duration-300 cursor-default group"
-  >
-    <span className="text-2xl group-hover:scale-110 transition-transform duration-300">
-      {tech.icon}
-    </span>
-    <div>
-      <p className="text-sm font-bold text-foreground leading-none">{tech.name}</p>
+const TechCard = ({ tech }: { tech: typeof technologies[0] }) => {
+  const imgSrc = tech.type === "simple" 
+    ? `https://cdn.simpleicons.org/${tech.slug}/${tech.accent}`
+    : `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${tech.slug}`;
+    
+  return (
+    <div
+      className="tech-card flex-shrink-0 flex items-center gap-3 px-5 py-3 rounded-2xl border border-foreground/[0.08] bg-foreground/[0.03] backdrop-blur-sm hover:border-kortex-orange/30 hover:bg-kortex-orange/[0.04] transition-all duration-300 cursor-default group"
+    >
+      <div className={`w-7 h-7 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 ${tech.adobeIcon ? 'tech-logo-adobe' : ''}`}>
+        <img 
+          src={imgSrc} 
+          alt={tech.name} 
+          className={`max-w-full max-h-full object-contain ${tech.invertInLight ? 'tech-logo-invertable' : ''}`} 
+        />
+      </div>
+      <div>
+        <p className="text-sm font-bold text-foreground leading-none">{tech.name}</p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const TechStackSection = () => {
   const headerRef = useScrollReveal<HTMLDivElement>();

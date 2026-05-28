@@ -16,6 +16,7 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
+    { label: "Sobre", href: "/sobre", isRoute: true },
     { label: "Serviços", href: "#services" },
     { label: "Tecnologias", href: "#tech" },
     { label: "Consultoria", href: "#consultancy" },
@@ -39,13 +40,23 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-10">
           <div className="flex items-center gap-8">
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-[13px] uppercase tracking-widest font-semibold text-muted-foreground hover:text-kortex-orange transition-colors"
-              >
-                {item.label}
-              </a>
+              item.isRoute ? (
+                <button
+                  key={item.label}
+                  onClick={() => navigate(item.href)}
+                  className="text-[13px] uppercase tracking-widest font-semibold text-muted-foreground hover:text-kortex-orange transition-colors bg-transparent border-none cursor-pointer"
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="text-[13px] uppercase tracking-widest font-semibold text-muted-foreground hover:text-kortex-orange transition-colors"
+                >
+                  {item.label}
+                </a>
+              )
             ))}
           </div>
 
@@ -71,13 +82,23 @@ const Navbar = () => {
             <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
             <div className="flex flex-col gap-6">
               {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="text-lg font-medium text-foreground hover:text-primary transition-colors"
-                >
-                  {item.label}
-                </a>
+                item.isRoute ? (
+                  <button
+                    key={item.label}
+                    onClick={() => navigate(item.href)}
+                    className="text-lg font-medium text-foreground hover:text-primary transition-colors bg-transparent border-none cursor-pointer text-left w-full"
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                )
               ))}
               <div className="flex justify-center mt-4">
                 <ColorModeToggle />

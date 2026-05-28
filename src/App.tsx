@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Landing from "./pages/Landing";
-import CompressedLanding from "./pages/CompressedLanding";
 import AdminDashboard from "./pages/admin/Dashboard";
 import WebApps from "./pages/admin/WebApps";
 import Performance from "./pages/admin/Performance";
@@ -51,7 +50,6 @@ const App = () => (
           <Routes>
             {/* ── Rotas Públicas ── */}
             <Route path="/" element={<Landing />} />
-            <Route path="/test-landing" element={<CompressedLanding />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cases" element={<Cases />} />
